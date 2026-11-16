@@ -24,7 +24,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 
 ## Milestone 2 — one point by hand (branch `m2-smoke`)
 
-- [ ] **2.1 Simulate one inverter point.** Hand-write a test bench for `inv_1`: one input transition time and one load taken from the middle of the grid in `docs/measurement-rules.md`, rising and falling input.
+- [x] **2.1 Simulate one inverter point.** Hand-write a test bench for `inv_1`: one input transition time and one load taken from the middle of the grid in `docs/measurement-rules.md`, rising and falling input.
   Done when: ngspice runs without errors and prints both delays and both output transition times, measured at the thresholds from task 1.4.
 
 - [ ] **2.2 Write the checker.** `checker/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
