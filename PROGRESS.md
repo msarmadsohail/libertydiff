@@ -89,3 +89,9 @@ What was done: wrote `reports/m3-decision.md` with the four hand-run errors, Cha
 Command that proves it: verify the report exists and inspect its tables against `reports/m2-smoke.md`, `reports/m3-charlib.md`, `reports/m3-libretto.md` and `reports/m3-others.md`; `git diff --check`.
 Result: decision evidence report complete. Hand-run: 4 points, median 20.5335%, worst 31.8481%. CharLib: 3,724 points, median 53.2228%, worst 6795.10%, 3,953.83 s. libretto: no valid points, stalled energy simulations. Stopped at the milestone 3 stop gate.
 Surprises or open points: the measurements do not cleanly satisfy either the “existing tools already close” premise or the “hand-run point close” premise; the report leaves the choice to the owner.
+
+## 2026-11-16 — task 3b.1 — done
+What was done: created branch `m3b-bench`; changed only the hand bench's full input ramp from 0.122474 ns to 0.204123333333 ns (`transition / 0.6`), reran the same point and compared all four values. Wrote `reports/m3b-ramp.md`.
+Command that proves it: `./.tools/envs/ngspice/Library/bin/ngspice_con.exe -b work/m3b-inv_1-ramp.cir -o work/m3b-inv_1-ramp.log` under `timeout 180`; `python checker/compare.py work/m3b-inv_1-ramp.json <foundry.lib> --output work/m3b-inv_1-ramp-comparison.csv`.
+Result: 4 points. Errors changed from -31.8481%, -11.6454%, -29.4216%, +1.96942% to -15.1304%, +7.62445%, -10.3498%, +4.18491%. Median absolute error 20.5335% before, 8.98713% after.
+Surprises or open points: results match the owner review's approximate values; no model, load or threshold setting changed.

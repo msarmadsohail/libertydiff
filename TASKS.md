@@ -57,7 +57,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 
 An owner-side review of milestone 2 found the hand-run test bench was wrong, so the milestone 3 decision report cannot be used yet. See `reports/m3-review.md`.
 
-- [ ] **3b.1 Correct the input ramp.** The foundry table's input transition is a 20%-to-80% time with slew derating 1.0, so the full 0-to-100% linear ramp lasts transition / 0.6. The milestone 2 bench used the transition value as the full ramp. Fix the bench and rerun the task 2.1 point.
+- [x] **3b.1 Correct the input ramp.** The foundry table's input transition is a 20%-to-80% time with slew derating 1.0, so the full 0-to-100% linear ramp lasts transition / 0.6. The milestone 2 bench used the transition value as the full ramp. Fix the bench and rerun the task 2.1 point.
   Done when: `reports/m3b-ramp.md` shows the four errors before and after. The review measured about -15%, +8%, -10% and +4% after the fix; a result far from those means something else changed.
 
 - [ ] **3b.2 Load the models the kit's way.** Replace the four hand-picked model includes with the kit's top-level file `sky130.lib.spice`, section `tt`, and rerun the same point.
