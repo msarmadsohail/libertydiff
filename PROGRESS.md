@@ -161,3 +161,9 @@ What was done: created branch `m5-package`; added Apache-2.0 `pyproject.toml` fo
 Command that proves it: `python -m venv .venv; .\.venv\Scripts\python.exe -m pip install -e .; .\.venv\Scripts\python.exe -m libertydiff --help`.
 Result: editable install succeeded in the fresh environment; CLI printed usage with the `compare` subcommand.
 Surprises or open points: no external dependency was needed; setuptools is declared only as the build backend.
+
+## 2026-11-17 — task 5.2 — done
+What was done: added `libertydiff/reader.py`, a structural Liberty reader returning cells, pins, arcs, tables, named axes, values and header-derived units. Supports both axis orders, scalar tables and quoted multiline value lists. Added four unit tests. Added pytest as optional test-only dependency because the project requires pytest and no runtime dependency.
+Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_reader.py -q`; call `read_library` on the SkyWater and IHP foundry files and print cell/table counts and units.
+Result: 4 tests passed. SkyWater: 428 cells and 5,368 tables; IHP: 84 cells and 1,022 tables. Both headers resolve to 1000 ps per time unit and 1000 fF per capacitance unit.
+Surprises or open points: axis variable names come from each table's declared template, never their position.

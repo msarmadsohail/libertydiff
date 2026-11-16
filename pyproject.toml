@@ -11,6 +11,9 @@ license = {text = "Apache-2.0"}
 authors = [{name = "libertydiff contributors"}]
 dependencies = []
 
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
 [project.scripts]
 libertydiff = "libertydiff.__main__:main"
 
