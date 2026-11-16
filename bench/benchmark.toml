@@ -1,0 +1,25 @@
+[sky130_fd_sc_hd]
+family = "sky130A"
+version = "e7a6777d157a9d94c7ac757457b9e4309e9e9000"
+library = "sky130_fd_sc_hd"
+corner = "tt_025C_1v80"
+voltage = 1.8
+temperature = 25.0
+foundry = "sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib"
+netlist = "sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice"
+models = "sky130A/libs.tech/ngspice/sky130.lib.spice"
+model_section = "tt"
+cells = ["inv_1", "inv_2", "buf_1", "nand2_1", "nand3_1", "nor2_1", "nor3_1", "and2_1", "or2_1", "xor2_1"]
+
+[sg13g2_stdcell]
+family = "ihp-sg13g2"
+version = "cc9afba57e0ec1b5ba77e6bbb638ba9dbe5866b8"
+library = "sg13g2_stdcell"
+corner = "typ_1p20V_25C"
+voltage = 1.2
+temperature = 25.0
+foundry = "ihp-sg13g2/libs.ref/sg13g2_stdcell/lib/sg13g2_stdcell_typ_1p20V_25C.lib"
+netlist = "ihp-sg13g2/libs.ref/sg13g2_stdcell/spice/sg13g2_stdcell.spice"
+models = "ihp-sg13g2/libs.tech/ngspice/models/cornerMOSlv.lib"
+model_section = "mos_tt"
+cells = ["inv_1", "inv_2", "buf_1", "nand2_1", "nand3_1", "nor2_1", "nor3_1", "and2_1", "or2_1", "xor2_1"]

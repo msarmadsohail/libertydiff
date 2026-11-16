@@ -122,7 +122,7 @@ There are no stop gates until task 8.5. If a task is blocked after three honest 
 - [x] **6.1 One pinned container.** A single `docker/Dockerfile` with pinned versions of ngspice, Magic and CharLib (by commit), building reproducibly. Record the image digest.
   Done when: the image builds from scratch and `docker run` prints the three versions.
 
-- [ ] **6.2 Benchmark definition.** `bench/benchmark.toml` lists, per chip kit: kit version, library, corner, foundry Liberty file, netlist source, and the cells. Start from: SkyWater `sky130_fd_sc_hd` with the ten cells used in milestone 3, and IHP `sg13g2_stdcell` with its ten nearest equivalents *(check the names)*.
+- [x] **6.2 Benchmark definition.** `bench/benchmark.toml` lists, per chip kit: kit version, library, corner, foundry Liberty file, netlist source, and the cells. Start from: SkyWater `sky130_fd_sc_hd` with the ten cells used in milestone 3, and IHP `sg13g2_stdcell` with its ten nearest equivalents *(check the names)*.
   Done when: a script validates the file and confirms every listed cell exists in its kit's netlist and foundry Liberty file.
 
 - [ ] **6.3 Runner.** `python -m bench.run --kit <name> [--cells ...]` fetches the kit if missing, runs CharLib in the container for each cell with the correct 20%-to-80% input transition and the foundry file's own grid, saves the generated Liberty file and a run record (versions, wall time, failures) under `work/`, and resumes after interruption without redoing finished cells.

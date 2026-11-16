@@ -191,3 +191,9 @@ What was done: added `docker/Dockerfile` with digest-pinned Python 3.12 trixie b
 Command that proves it: `docker build --no-cache -f docker/Dockerfile -t cellchar-bench:m6 .`; `docker run --rm cellchar-bench:m6`; `docker image inspect cellchar-bench:m6 --format '{{.Id}}'`.
 Result: from-scratch build succeeded. Printed ngspice-44.2, Magic 8.3.703 and CharLib usage. Image digest `sha256:b9c8b1b1733e315fb2b78f7b7fb379d1468a90d7a729c6a31547034929e7eb2c`.
 Surprises or open points: modified PySpice still emits its NumPy compatibility warning but CharLib starts and prints usage.
+
+## 2026-11-17 — task 6.2 — done
+What was done: added `bench/benchmark.toml` with pinned SkyWater and IHP versions, libraries, corners, foundry files, netlists, models and ten cells per kit. Added `bench/validate.py` to check every cell in both source files. Confirmed IHP names use the `sg13g2_` prefix and equivalent cells exist.
+Command that proves it: `.venv/Scripts/python.exe -m bench.validate`.
+Result: SkyWater 10 of 10 cells and IHP 10 of 10 cells present in both netlist and foundry Liberty.
+Surprises or open points: the IHP library is named `sg13g2_stdcell` but cell names use the shorter `sg13g2_` prefix.
