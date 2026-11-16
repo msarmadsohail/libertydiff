@@ -38,7 +38,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 
 ## Milestone 3 — measure the existing tools (branch `m3-incumbents`)
 
-- [ ] **3.1 CharLib.** Install `stineje/CharLib` under `.tools/`, run it on the ten cells at the corner above, and run the checker on its output.
+- [x] **3.1 CharLib.** Install `stineje/CharLib` under `.tools/`, run it on the ten cells at the corner above, and run the checker on its output.
   Done when: `reports/m3-charlib.md` holds the per-cell error table, with the number of table points compared for each cell, or a precise account of why it could not be run.
 
 - [ ] **3.2 libretto.** Same for `snishizawa/libretto`.
