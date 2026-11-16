@@ -155,3 +155,9 @@ What was done: wrote `reports/m3c-closing.md` combining method agreement, SkyWat
 Command that proves it: inspect `reports/m3c-closing.md` against `reports/m3c-agreement.md`, `reports/m3c-absolute.md`, `reports/m3c-nand2.md` and `reports/m3c-ihp.md`; `git diff --check`.
 Result: same simulator/CharLib gives IHP median 4.65003% over 196 points versus extracted SkyWater CharLib median 14.6039% over 196 points. Absolute medians are close (15.2825 ps versus 15.8202 ps hand-run). Conclusion: percentage gap primarily follows kit/model/library, not simulator alone; model versus foundry-method effects remain confounded. Stopped.
 Surprises or open points: a large percentage gap does not imply a correspondingly large absolute-time gap on the second kit.
+
+## 2026-11-17 — task 5.1 — done
+What was done: created branch `m5-package`; added Apache-2.0 `pyproject.toml` for Python 3.10+, moved comparison modules into `libertydiff/`, added package and CLI entry points, retained `checker/compare.py` as a thin wrapper, updated references and ignored egg-info. No runtime dependencies added.
+Command that proves it: `python -m venv .venv; .\.venv\Scripts\python.exe -m pip install -e .; .\.venv\Scripts\python.exe -m libertydiff --help`.
+Result: editable install succeeded in the fresh environment; CLI printed usage with the `compare` subcommand.
+Surprises or open points: no external dependency was needed; setuptools is declared only as the build backend.

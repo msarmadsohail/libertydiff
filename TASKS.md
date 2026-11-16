@@ -102,7 +102,7 @@ There are no stop gates until task 8.5. If a task is blocked after three honest 
 
 ## Milestone 5 — the comparison tool as a package (branch `m5-package`)
 
-- [ ] **5.1 Package layout.** Move the comparison code into a Python package `libertydiff/` with a `pyproject.toml` (name `libertydiff`, Apache-2.0, Python 3.10+, no dependencies outside the standard library unless one is justified in `PROGRESS.md`). Keep `checker/` as a thin wrapper or remove it and update every reference.
+- [x] **5.1 Package layout.** Move the comparison code into a Python package `libertydiff/` with a `pyproject.toml` (name `libertydiff`, Apache-2.0, Python 3.10+, no dependencies outside the standard library unless one is justified in `PROGRESS.md`). Keep `checker/` as a thin wrapper or remove it and update every reference.
   Done when: `pip install -e .` works in a fresh virtual environment under `.venv/` and `python -m libertydiff --help` prints usage.
 
 - [ ] **5.2 Liberty reader.** One reader that returns, for every cell, pin, timing arc and table: the two axes with their variable names, the values, and the units from the library header. It must handle both axis orders (input transition first or load first), scalar tables, and quoted multi-line value lists.
