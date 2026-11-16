@@ -137,3 +137,9 @@ What was done: added signed `absolute_error_ps` to checker CSV output and median
 Command that proves it: `python checker/compare.py <foundry.lib> <foundry.lib> --output work/m3c-self.csv`; `python checker/compare.py work/m2-modified.lib <foundry.lib> --output work/m3c-modified.csv`; `python checker/compare.py work/m3b-inv-grid-extracted.json <foundry.lib> --output work/m3c-inv-grid-extracted.csv`; assert both test cases and count thresholds.
 Result: identity 247,352 points at zero in both measures; perturbation exactly one point at 10% and 1.43656 ps. Extracted grid: 196 points, median 14.3659% and 15.8202 ps, worst 235.211% and 408.860 ps; 127 points exceed both 10% and 5 ps.
 Surprises or open points: no cell_fall point exceeds both thresholds despite the 235.211% worst percentage, confirming that near-zero-delay percentages can be misleading.
+
+## 2026-11-17 — task 3c.3 — done
+What was done: ran CharLib on schematic `nand2_1` with four workers, compared with the corrected checker and wrote `reports/m3c-nand2.md` with per-table percentage and picosecond errors.
+Command that proves it: `charlib run /work/work/m3-charlib.yml --output /work/work/m3c-nand2.lib -j 4 --filter 'sky130_fd_sc_hd__nand2_1$'`; `python checker/compare.py work/m3c-nand2.lib <foundry.lib> --output work/m3c-nand2-comparison.csv`.
+Result: 392 points across two arcs. Overall median 9.11900% and 15.0047 ps; worst 284.899% and 224.695 ps. Runtime 606.47 s for 790 operations.
+Surprises or open points: this cell's median percentage is lower than the inverter's, but near-zero falling-delay points still produce large percentage errors.
