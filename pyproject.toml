@@ -19,3 +19,6 @@ libertydiff = "libertydiff.__main__:main"
 
 [tool.setuptools.packages.find]
 include = ["libertydiff*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

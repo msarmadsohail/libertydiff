@@ -1,30 +1,11 @@
 import csv
 import json
+from pathlib import Path
 
 from libertydiff.diff import compare_paths, summary_text, write_csv, write_json
 
 
-BASE = '''library (demo) {
-  time_unit : "1ns";
-  capacitive_load_unit (1,pf);
-  lu_table_template ("delay") {
-    variable_1 : input_net_transition;
-    variable_2 : total_output_net_capacitance;
-  }
-  lu_table_template ("delay_rev") {
-    variable_1 : total_output_net_capacitance;
-    variable_2 : input_net_transition;
-  }
-  cell (inv) { pin (Y) { timing () {
-    related_pin : "A";
-    cell_rise ("delay") {
-      index_1 ("0.1, 0.2");
-      index_2 ("0.01, 0.02");
-      values ("1, 2", "3, 4");
-    }
-  } } }
-}
-'''
+BASE = (Path(__file__).parent / "fixtures" / "basic.lib").read_text()
 
 
 def test_identity(tmp_path):

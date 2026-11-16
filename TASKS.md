@@ -114,7 +114,7 @@ There are no stop gates until task 8.5. If a task is blocked after three honest 
 - [x] **5.4 Honest summaries.** The summary always prints the number of points compared and the number unmatched, and gives both percentage and picosecond figures. Add `--min-abs` so that points whose absolute difference is below a threshold can be reported separately, because a large percentage of a near-zero delay is not a meaningful error.
   Done when: unit tests cover the counts and the threshold, and the SkyWater `inv_1` comparison from milestone 3c is reproduced to the same figures.
 
-- [ ] **5.5 Tests.** `pytest` runs the whole test suite in under a minute with no chip kit installed (tests use small fixtures under `tests/fixtures/`, never the foundry files).
+- [x] **5.5 Tests.** `pytest` runs the whole test suite in under a minute with no chip kit installed (tests use small fixtures under `tests/fixtures/`, never the foundry files).
   Done when: `pytest` passes in the fresh virtual environment and the number of tests is recorded.
 
 ## Milestone 6 — the benchmark harness (branch `m6-harness`)
