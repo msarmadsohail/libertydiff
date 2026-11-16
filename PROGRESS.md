@@ -149,3 +149,9 @@ What was done: fetched IHP SG13G2 with ciel, located its typical Liberty and sta
 Command that proves it: `charlib run /work/work/m3c-ihp.yml --output /work/work/m3c-ihp.lib -j 4` in `cellchar-openvaf:latest` from `/work/work/m3c-ihp-init`; `python checker/compare.py work/m3c-ihp.lib <ihp-foundry.lib> --output work/m3c-ihp-comparison.csv`.
 Result: 196 points, median 4.65003% and 15.2825 ps, worst 64.5966% and 240.681 ps. Runtime 4,728.70 s for 395 operations. Header quotes IHP 2025, date and revision 0.1.4 but names no producer tool.
 Surprises or open points: initial shared-ngspice run failed because OSDI modules were absent; `pre_osdi` is unavailable in ngspice 44.2, while `.spiceinit` `osdi` loads before parsing and works. Full ngspice source build was unnecessary and failed on legacy `sys_errlist`.
+
+## 2026-11-17 — task 3c.5 — done (STOP)
+What was done: wrote `reports/m3c-closing.md` combining method agreement, SkyWater absolute/percentage errors, second-cell results and IHP cross-kit measurements. Distinguished kit-following percentage error from shared absolute residuals and stated the remaining confounds. No recommendation.
+Command that proves it: inspect `reports/m3c-closing.md` against `reports/m3c-agreement.md`, `reports/m3c-absolute.md`, `reports/m3c-nand2.md` and `reports/m3c-ihp.md`; `git diff --check`.
+Result: same simulator/CharLib gives IHP median 4.65003% over 196 points versus extracted SkyWater CharLib median 14.6039% over 196 points. Absolute medians are close (15.2825 ps versus 15.8202 ps hand-run). Conclusion: percentage gap primarily follows kit/model/library, not simulator alone; model versus foundry-method effects remain confounded. Stopped.
+Surprises or open points: a large percentage gap does not imply a correspondingly large absolute-time gap on the second kit.
