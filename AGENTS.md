@@ -1,0 +1,37 @@
+# Working rules for this repository
+
+Read this file, then `docs/BLUEPRINT.md`, then `TASKS.md`, then `PROGRESS.md`, at the start of every working stretch. The chat history is not reliable over a long run; these files are the memory.
+
+## What this project is
+A free standard-cell characteriser: cell netlists and transistor models in, a Liberty (`.lib`) file out, with its error against the foundry's own Liberty file measured and published. Full description: `docs/BLUEPRINT.md`.
+
+## How to work
+1. Take the first task in `TASKS.md` that is not marked done. Do only that task.
+2. Each task has a "Done when" check. A task is done only when that check has been run and its output is recorded.
+3. After every task, append an entry to `PROGRESS.md`: date, task id, what was done, the exact command that proves it, the result, and anything that surprised you.
+4. Commit after every task. One short lower-case line, no trailer, no emoji.
+5. Work on a branch per milestone (`m1-tools`, `m2-smoke`, ...). Do not push, open pull requests or create remote repositories until the owner says the remote is ready.
+6. If a task cannot be completed after three honest attempts, write what was tried and why it failed in `PROGRESS.md`, mark the task `BLOCKED`, and stop. Do not skip ahead and do not invent a result.
+
+## Stop gates
+Tasks marked **STOP** end the run. Write the report the task asks for and wait for the owner. Do not continue past a stop gate on your own judgement.
+
+## Rules that are never broken
+- **The foundry Liberty file is read only by code under `checker/`.** Nothing under `cellchar/` may open it, import from `checker/`, or contain numbers copied from it. A characteriser that copies the answer passes every test and is worthless.
+- **No fudge factors.** No per-cell constants, correction tables or scale factors tuned to make a comparison pass. Every constant has a physical reason written beside it.
+- **Never edit `checker/`, `checker/heldout.txt` or a "Done when" check to make something pass.** If a check is wrong, say so in `PROGRESS.md` and stop.
+- **Report numbers with their base.** Never "12 cells pass"; always "12 of 14 cells within 5%, at 49 table points each".
+- **Verify before asserting.** A path, version or command is a fact only after a command showed it. Items marked *(check)* in the blueprint are unverified.
+- **Nothing system-wide.** Tools go under `.tools/`, chip-kit data under `pdk/`, scratch under `work/`. All three are ignored by git. Do not change PATH, the registry or global git settings.
+- **No secrets in the repository.** Never print, log or commit an API key or token.
+- **Commit identity is already set for this repository.** Do not change it and do not pass `-c user.email`.
+
+## Environment
+- Windows 11. Shells: PowerShell and Git Bash. Python 3.11 and 3.12, `uv`, Node, Docker Desktop are installed.
+- If a tool will not install natively, run it in a Docker container and record the image and command in `PROGRESS.md`.
+- Simulations are processor-bound. Run them in parallel, but leave two cores free.
+
+## What not to do
+- Do not widen scope. Flip-flops, power, extra corners and other chip kits are later milestones and are listed as out of scope until the owner opens them.
+- Do not rewrite working code for style.
+- Do not add dependencies without writing one line in `PROGRESS.md` saying why.

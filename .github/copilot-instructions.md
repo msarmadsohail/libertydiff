@@ -1,0 +1,1 @@
+Follow `AGENTS.md` at the repository root. Before doing anything, read `AGENTS.md`, `docs/BLUEPRINT.md`, `TASKS.md` and `PROGRESS.md`, then take the first unfinished task in `TASKS.md`. Stop at any task marked STOP.

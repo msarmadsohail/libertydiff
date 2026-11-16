@@ -1,0 +1,9 @@
+.tools/
+.venv/
+__pycache__/
+*.pyc
+pdk/
+work/
+*.raw
+*.log
+.env
