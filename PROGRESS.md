@@ -167,3 +167,9 @@ What was done: added `libertydiff/reader.py`, a structural Liberty reader return
 Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_reader.py -q`; call `read_library` on the SkyWater and IHP foundry files and print cell/table counts and units.
 Result: 4 tests passed. SkyWater: 428 cells and 5,368 tables; IHP: 84 cells and 1,022 tables. Both headers resolve to 1000 ps per time unit and 1000 fF per capacitance unit.
 Surprises or open points: axis variable names come from each table's declared template, never their position.
+
+## 2026-11-17 — task 5.3 — done
+What was done: added `libertydiff/diff.py` with cell/arc/table matching, named-axis point alignment, unit conversion to picoseconds, unmatched-table reporting, per-cell/table summaries, and CSV/JSON output. Wired `libertydiff compare` options `--cells`, `--csv`, `--json`, `--summary` and `--min-abs`. Added four comparison tests.
+Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_reader.py tests/test_diff.py -q`; `.venv/Scripts/python.exe -m libertydiff compare --help`.
+Result: 8 tests passed, covering zero identity, exactly one 10% point, axes-swapped/transposed zero difference, and unmatched/output behavior.
+Surprises or open points: point coordinates are matched by variable name and numeric value, so table axis order does not affect comparison.
