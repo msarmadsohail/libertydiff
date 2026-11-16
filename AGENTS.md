@@ -10,7 +10,7 @@ A free standard-cell characteriser: cell netlists and transistor models in, a Li
 2. Each task has a "Done when" check. A task is done only when that check has been run and its output is recorded.
 3. After every task, append an entry to `PROGRESS.md`: date, task id, what was done, the exact command that proves it, the result, and anything that surprised you.
 4. Commit after every task. One short lower-case line, no trailer, no emoji.
-5. Work on a branch per milestone (`m1-tools`, `m2-smoke`, ...). Do not push, open pull requests or create remote repositories until the owner says the remote is ready.
+5. Work on a branch per milestone (`m1-tools`, `m2-smoke`, ...) and merge it into `main` locally when the milestone is finished. Everything stays on this machine: never push, never add a remote, never open a pull request, never use the `gh` tool. The owner publishes the branches later.
 6. If a task cannot be completed after three honest attempts, write what was tried and why it failed in `PROGRESS.md`, mark the task `BLOCKED`, and stop. Do not skip ahead and do not invent a result.
 
 ## Stop gates
