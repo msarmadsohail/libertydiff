@@ -12,7 +12,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **1.1 Install ngspice locally.** Try a micromamba environment under `.tools/` (`micromamba-win-64` from the mamba-org releases page, `MAMBA_ROOT_PREFIX` inside `.tools/`, package `ngspice` from conda-forge) *(check)*. Fall back to the official Windows build, then to Docker.
   Done when: `ngspice --version` prints a version, and a three-line RC circuit simulates and its measured time constant is within 1% of R×C.
 
-- [ ] **1.2 Fetch the SkyWater 130 nm kit.** Use the `ciel` package (formerly `volare`) *(check the command; fetch only what is needed if it supports that)* into `pdk/`.
+- [x] **1.2 Fetch the SkyWater 130 nm kit.** Use the `ciel` package (formerly `volare`) *(check the command; fetch only what is needed if it supports that)* into `pdk/`.
   Done when: these three files exist and their sizes are recorded *(check each path)*:
   the foundry Liberty file `sky130_fd_sc_hd__tt_025C_1v80.lib`, the cell netlists `sky130_fd_sc_hd.spice`, and the ngspice model file `sky130.lib.spice`.
 
