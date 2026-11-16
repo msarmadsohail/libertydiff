@@ -53,6 +53,27 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
   3. existing tools are well off but the hand-run point is close, so build.
   Do not choose. State the evidence and stop.
 
+## Milestone 3b — fix the test bench, then measure again (branch `m3b-bench`)
+
+An owner-side review of milestone 2 found the hand-run test bench was wrong, so the milestone 3 decision report cannot be used yet. See `reports/m3-review.md`.
+
+- [ ] **3b.1 Correct the input ramp.** The foundry table's input transition is a 20%-to-80% time with slew derating 1.0, so the full 0-to-100% linear ramp lasts transition / 0.6. The milestone 2 bench used the transition value as the full ramp. Fix the bench and rerun the task 2.1 point.
+  Done when: `reports/m3b-ramp.md` shows the four errors before and after. The review measured about -15%, +8%, -10% and +4% after the fix; a result far from those means something else changed.
+
+- [ ] **3b.2 Load the models the kit's way.** Replace the four hand-picked model includes with the kit's top-level file `sky130.lib.spice`, section `tt`, and rerun the same point.
+  Done when: the report states how much each of the four numbers moved.
+
+- [ ] **3b.3 Full inverter grid.** Run all 49 points of `inv_1` for the four tables (196 points) with the corrected bench.
+  Done when: `reports/m3b-inv-grid.md` gives median and worst error per table, and says where the error concentrates (small loads, large loads, fast inputs, slow inputs).
+
+- [ ] **3b.4 Parasitics.** The kit's `inv_1` netlist has two transistors and no wiring capacitance or junction areas, while the foundry table came from an extracted layout. Find out whether the kit ships extracted netlists. If not, extract `inv_1` from its layout under `libs.ref/sky130_fd_sc_hd/mag` with Magic (in Docker if needed), including parasitic capacitance, and rerun task 3b.3 on the extracted netlist.
+  Done when: the report compares median and worst error per table, schematic netlist against extracted netlist, over the same 196 points.
+
+- [ ] **3b.5 Re-check the CharLib measurement.** A worst error of 6795% is a setup fault, not an accuracy figure. Look at the ten worst points and find the cause (units, thresholds, how the input transition is defined, missing points). Change only the configuration, not CharLib's code, and rerun `inv_1` only.
+  Done when: `reports/m3b-charlib.md` names the cause and gives the `inv_1` error table before and after, with point counts.
+
+- [ ] **3b.6 STOP — revised decision report.** Rewrite the evidence for the three options in `reports/m3b-decision.md` using the corrected numbers. Do not choose. Stop.
+
 ## Milestone 4 — version 0 (branch `m4-v0`), only after the owner opens it
 
 - [ ] **4.1 Fix the held-out list.** Write `checker/heldout.txt` with four of the ten cells, chosen by the owner. Code under `cellchar/` is developed against the other six only.

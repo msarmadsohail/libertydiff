@@ -29,6 +29,8 @@ Tasks marked **STOP** end the run. Write the report the task asks for and wait f
 ## Environment
 - Windows 11. Shells: PowerShell and Git Bash. Python 3.11 and 3.12, `uv`, Node, Docker Desktop are installed.
 - If a tool will not install natively, run it in a Docker container and record the image and command in `PROGRESS.md`.
+- **On Windows, never run `ngspice.exe`.** It is the windowed program: it opens a window and a dialog box and then waits for a person to click, which hangs an unattended run. Always use `ngspice_con.exe`, and for simulations always in batch mode: `ngspice_con.exe -b deck.sp -o work/deck.log`. Every deck ends with `.end` and exits on its own. Wherever a task says `ngspice`, read `ngspice_con.exe`.
+- Any command that could open a window or wait for input gets a timeout.
 - Simulations are processor-bound. Run them in parallel, but leave two cores free.
 
 ## What not to do

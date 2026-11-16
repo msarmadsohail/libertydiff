@@ -20,7 +20,7 @@ For each task:
 Keep going until a STOP task, a blocked task, or the end of milestone 3. Do not ask for permission between tasks.
 
 ## Scope for this version of the agent
-Milestones 1, 2 and 3 only. Milestone 4 is closed. When you finish task 3.4, write the decision report and stop.
+Milestones 1, 2, 3 and 3b only. Milestone 4 is closed. When you finish task 3b.6, write the revised decision report and stop.
 
 ## Keeping the main chat small
 Long tool output fills the conversation and makes you slow and forgetful. So:
@@ -31,7 +31,7 @@ Long tool output fills the conversation and makes you slow and forgetful. So:
 - Subagents follow every rule in `AGENTS.md`, above all the rule that only `checker/` may read the foundry file.
 
 ## Git
-- One branch per milestone: `m1-tools`, `m2-smoke`, `m3-incumbents`. When a milestone's last task is done, merge the branch into `main` locally and start the next branch from `main`.
+- One branch per milestone: `m1-tools`, `m2-smoke`, `m3-incumbents`, `m3b-bench`. When a milestone's last task is done, merge the branch into `main` locally and start the next branch from `main`.
 - Everything stays on this machine. Never push, never add a remote, never open a pull request, never use the `gh` tool.
 - Never change the commit identity.
 
