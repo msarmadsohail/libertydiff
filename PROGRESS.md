@@ -41,3 +41,27 @@ What was done: wrote `checker/read_rules.py`, which reads the foundry Liberty he
 Command that proves it: `python checker/read_rules.py pdk/ciel/sky130/versions/e7a6777d157a9d94c7ac757457b9e4309e9e9000/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib | Tee-Object docs/measurement-rules.md`; then parse every `.lib:<line>` reference and check it is within the 12,841,637-byte source file, and run `python -m py_compile checker/read_rules.py`.
 Result: document contains 18 valid source-line references covering every reported value; Python syntax check passed. Delay thresholds are 50%, slew thresholds 20%/80%, slew derating 1.0, and each delay grid has 7 points.
 Surprises or open points: the delay table's input grid differs slightly from the similarly named internal-power grid; the reader deliberately selects `cell_fall`, not the power table.
+
+## 2026-11-16 — task 2.1 — done
+What was done: hand-wrote `work/m2-inv_1.cir` for `inv_1` at input transition 0.122474 ns and load 0.00952062 pF (fourth of seven grid points), with rising and falling input. Used the foundry cell netlist and only its two required typical transistor model files, at 25 C and 1.8 V. Measured 50%-50% delays and 20%-80% output transitions.
+Command that proves it: `./.tools/envs/ngspice/Library/bin/ngspice_con.exe -b work/m2-inv_1.cir -o work/m2-inv_1.log` (bounded by `timeout 180` in Git Bash), then require all four measurements and reject simulation errors in the log.
+Result: delay_fall 0.0594680 ns; delay_rise 0.107017 ns; transition_fall 0.0422483 ns; transition_rise 0.0934824 ns. Exit code 0 and no simulation errors.
+Surprises or open points: the kit needs `.option ngbehavior=ps` and `.option scale=1e-6` for its subcircuit parameters and micrometre dimensions. Including the entire model library produced unused-device errors and very slow parsing, so the bench includes only the nfet_01v8 and pfet_01v8_hvt typical models plus their mismatch parameter files, with both mismatch switches zero.
+
+## 2026-11-16 — task 2.2 — done
+What was done: wrote `checker/compare.py` to compare generated Liberty or JSON timing points against the foundry Liberty file, write a CSV row per point, and print median and worst absolute percentage errors. It handles the four NLDM delay/transition tables and their arcs.
+Command that proves it: `python checker/compare.py <foundry.lib> <foundry.lib> --output work/m2-self.csv`; change only `inv_1` `cell_fall` row 1 column 1 from 0.0143656 to 0.01580216 in `work/m2-modified.lib`; `python checker/compare.py work/m2-modified.lib <foundry.lib> --output work/m2-modified.csv`; assert nonzero-row counts and the changed value with Python.
+Result: self-comparison: 247,352 points, zero nonzero errors, median 0%, worst 0%. Modified comparison: 247,352 points, exactly one nonzero error at `sky130_fd_sc_hd__inv_1`, `A->Y`, `cell_fall`, input 0.01 ns/load 0.0005 pF, exactly 10%.
+Surprises or open points: initial nested regular-expression parsing was too slow and early state tracking missed arcs after internal-power groups. The final token parser associates each timing group with its own `related_pin`; the acceptance assertions caught these defects rather than accepting an empty or partial comparison.
+
+## 2026-11-16 — task 2.3 — done
+What was done: converted the four task 2.1 measurements to JSON, ran the checker against the foundry file, and wrote `reports/m2-smoke.md` with generated/foundry values, signed percentage errors and all simulator options.
+Command that proves it: `python checker/compare.py work/m2-inv_1.json pdk/ciel/sky130/versions/e7a6777d157a9d94c7ac757457b9e4309e9e9000/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib --output work/m2-inv_1-comparison.csv`.
+Result: 4 points compared. cell_fall -31.8481%; cell_rise -11.6454%; fall_transition -29.4216%; rise_transition +1.96942%. Median absolute error 20.5335%, worst 31.8481%.
+Surprises or open points: three of four hand-run values are substantially faster than the foundry values; no correction factor has been applied.
+
+## 2026-11-16 — task 2.4 — done
+What was done: repeated the hand-run inverter point with a 0.1 ps print step instead of 1 ps and `reltol=1e-5 abstol=1e-15 vntol=1e-8 trtol=1`; appended the four movements to `reports/m2-smoke.md`.
+Command that proves it: `./.tools/envs/ngspice/Library/bin/ngspice_con.exe -b work/m2-inv_1-tight.cir -o work/m2-inv_1-tight.log` under `timeout 180`, then parse both logs and calculate `(tight-baseline)/baseline*100` for all four measurements.
+Result: delay_fall +0.002691%; delay_rise +0.000934%; transition_fall -0.021776%; transition_rise -0.001819%. Every movement is below 1%, so no new project defaults are required.
+Surprises or open points: tightening the numerical settings does not explain the much larger foundry differences measured in task 2.3.

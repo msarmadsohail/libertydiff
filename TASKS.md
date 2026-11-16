@@ -24,16 +24,16 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 
 ## Milestone 2 — one point by hand (branch `m2-smoke`)
 
-- [ ] **2.1 Simulate one inverter point.** Hand-write a test bench for `inv_1`: one input transition time and one load taken from the middle of the grid in `docs/measurement-rules.md`, rising and falling input.
+- [x] **2.1 Simulate one inverter point.** Hand-write a test bench for `inv_1`: one input transition time and one load taken from the middle of the grid in `docs/measurement-rules.md`, rising and falling input.
   Done when: ngspice runs without errors and prints both delays and both output transition times, measured at the thresholds from task 1.4.
 
-- [ ] **2.2 Write the checker.** `checker/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
+- [x] **2.2 Write the checker.** `checker/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
   Done when: fed the foundry file against itself it reports zero error at every point, and fed a copy with one value changed by 10% it reports exactly that point.
 
-- [ ] **2.3 Compare the hand-run point.** Run the checker on the result of 2.1.
+- [x] **2.3 Compare the hand-run point.** Run the checker on the result of 2.1.
   Done when: `reports/m2-smoke.md` states the four percentage errors and the exact simulator options used.
 
-- [ ] **2.4 Simulator sensitivity.** Repeat 2.1 with a tighter time step and tighter tolerances.
+- [x] **2.4 Simulator sensitivity.** Repeat 2.1 with a tighter time step and tighter tolerances.
   Done when: the report states how much the four numbers moved. If they moved by more than 1%, find settings where they stop moving and record them as the project defaults.
 
 ## Milestone 3 — measure the existing tools (branch `m3-incumbents`)
