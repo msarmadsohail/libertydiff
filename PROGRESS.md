@@ -125,3 +125,33 @@ What was done: wrote `reports/m3b-decision.md` using the corrected ramp, full sc
 Command that proves it: inspect `reports/m3b-decision.md` against `reports/m3b-ramp.md`, `reports/m3b-inv-grid.md`, `reports/m3b-parasitics.md` and `reports/m3b-charlib.md`; `git diff --check`.
 Result: revised report complete. Corrected single point median 8.98713% over 4 points; extracted hand grid median 14.3659% over 196 points; extracted CharLib median 14.6039% over 196 points. Stopped at the milestone 3b stop gate.
 Surprises or open points: hand-run and CharLib full-grid results are similar, so the evidence does not show a clear implementation advantage for building a new tool.
+
+## 2026-11-17 — task 3c.1 — done
+What was done: created branch `m3c-gap`; matched hand-run and CharLib extracted inverter points by table and canonical grid index, computed absolute generated-value differences and wrote `reports/m3c-agreement.md`.
+Command that proves it: Python CSV comparison of `work/m3b-inv-grid-extracted-comparison.csv` and `work/m3b-charlib-extracted-comparison.csv`, using seven known slew and load coordinates to canonicalize rounded CharLib labels.
+Result: 196 of 196 points matched. Median differences: cell_fall 0.189200 ps, cell_rise 0.295000 ps, fall_transition 0.946200 ps, rise_transition 0.468900 ps. Worst: 8.38200, 354.519, 241.055 and 208.029 ps respectively.
+Surprises or open points: only 40 keys matched before canonicalization because CharLib rounds grid labels. Largest method disagreement is at 1.5 ns input and 0.181284 pF, not a typical grid point.
+
+## 2026-11-17 — task 3c.2 — done
+What was done: added signed `absolute_error_ps` to checker CSV output and median/worst picosecond summaries to its console output. Re-ran identity and 10% perturbation tests and re-reported the extracted inverter grid in `reports/m3c-absolute.md`.
+Command that proves it: `python checker/compare.py <foundry.lib> <foundry.lib> --output work/m3c-self.csv`; `python checker/compare.py work/m2-modified.lib <foundry.lib> --output work/m3c-modified.csv`; `python checker/compare.py work/m3b-inv-grid-extracted.json <foundry.lib> --output work/m3c-inv-grid-extracted.csv`; assert both test cases and count thresholds.
+Result: identity 247,352 points at zero in both measures; perturbation exactly one point at 10% and 1.43656 ps. Extracted grid: 196 points, median 14.3659% and 15.8202 ps, worst 235.211% and 408.860 ps; 127 points exceed both 10% and 5 ps.
+Surprises or open points: no cell_fall point exceeds both thresholds despite the 235.211% worst percentage, confirming that near-zero-delay percentages can be misleading.
+
+## 2026-11-17 — task 3c.3 — done
+What was done: ran CharLib on schematic `nand2_1` with four workers, compared with the corrected checker and wrote `reports/m3c-nand2.md` with per-table percentage and picosecond errors.
+Command that proves it: `charlib run /work/work/m3-charlib.yml --output /work/work/m3c-nand2.lib -j 4 --filter 'sky130_fd_sc_hd__nand2_1$'`; `python checker/compare.py work/m3c-nand2.lib <foundry.lib> --output work/m3c-nand2-comparison.csv`.
+Result: 392 points across two arcs. Overall median 9.11900% and 15.0047 ps; worst 284.899% and 224.695 ps. Runtime 606.47 s for 790 operations.
+Surprises or open points: this cell's median percentage is lower than the inverter's, but near-zero falling-delay points still produce large percentage errors.
+
+## 2026-11-17 — task 3c.4 — done
+What was done: fetched IHP SG13G2 with ciel, located its typical Liberty and standard-cell netlist, inspected the header, compiled the supplied PSP103/PSP103-NQS Verilog-A models with OpenVAF Reloaded v24.0.2mob, loaded them through `.spiceinit`, and ran CharLib on `sg13g2_inv_1`. Wrote `reports/m3c-ihp.md`.
+Command that proves it: `charlib run /work/work/m3c-ihp.yml --output /work/work/m3c-ihp.lib -j 4` in `cellchar-openvaf:latest` from `/work/work/m3c-ihp-init`; `python checker/compare.py work/m3c-ihp.lib <ihp-foundry.lib> --output work/m3c-ihp-comparison.csv`.
+Result: 196 points, median 4.65003% and 15.2825 ps, worst 64.5966% and 240.681 ps. Runtime 4,728.70 s for 395 operations. Header quotes IHP 2025, date and revision 0.1.4 but names no producer tool.
+Surprises or open points: initial shared-ngspice run failed because OSDI modules were absent; `pre_osdi` is unavailable in ngspice 44.2, while `.spiceinit` `osdi` loads before parsing and works. Full ngspice source build was unnecessary and failed on legacy `sys_errlist`.
+
+## 2026-11-17 — task 3c.5 — done (STOP)
+What was done: wrote `reports/m3c-closing.md` combining method agreement, SkyWater absolute/percentage errors, second-cell results and IHP cross-kit measurements. Distinguished kit-following percentage error from shared absolute residuals and stated the remaining confounds. No recommendation.
+Command that proves it: inspect `reports/m3c-closing.md` against `reports/m3c-agreement.md`, `reports/m3c-absolute.md`, `reports/m3c-nand2.md` and `reports/m3c-ihp.md`; `git diff --check`.
+Result: same simulator/CharLib gives IHP median 4.65003% over 196 points versus extracted SkyWater CharLib median 14.6039% over 196 points. Absolute medians are close (15.2825 ps versus 15.8202 ps hand-run). Conclusion: percentage gap primarily follows kit/model/library, not simulator alone; model versus foundry-method effects remain confounded. Stopped.
+Surprises or open points: a large percentage gap does not imply a correspondingly large absolute-time gap on the second kit.

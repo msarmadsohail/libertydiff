@@ -78,19 +78,19 @@ An owner-side review of milestone 2 found the hand-run test bench was wrong, so 
 
 Milestone 3b showed a hand-written bench and CharLib landing on almost the same error (median about 14 to 15% over 196 points). Two independent methods agreeing with each other but not with the foundry file points at the models or the foundry file, not at the characteriser. These tasks test that.
 
-- [ ] **3c.1 Do the two methods agree with each other?** Compare, point by point, the hand-run extracted grid against the CharLib extracted rerun for `inv_1` (196 points).
+- [x] **3c.1 Do the two methods agree with each other?** Compare, point by point, the hand-run extracted grid against the CharLib extracted rerun for `inv_1` (196 points).
   Done when: `reports/m3c-agreement.md` gives the median and worst difference between the two methods, per table.
 
-- [ ] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `checker/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
+- [x] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `checker/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
   Done when: the `inv_1` extracted grid is re-reported with both measures, and the report states how many of the 196 points are off by more than 10% and also by more than 5 ps.
 
-- [ ] **3c.3 A second cell.** Run CharLib on `nand2_1` with the schematic netlist and compare with the corrected checker.
+- [x] **3c.3 A second cell.** Run CharLib on `nand2_1` with the schematic netlist and compare with the corrected checker.
   Done when: `reports/m3c-nand2.md` gives the per-table error with point counts, in both measures.
 
-- [ ] **3c.4 A second kit.** Fetch the IHP SG13G2 kit *(check how; `ciel` may support it)*, find its standard-cell Liberty file and netlists, read the Liberty header for how and with what tool it was produced, and run CharLib on its smallest inverter at the typical corner.
+- [x] **3c.4 A second kit.** Fetch the IHP SG13G2 kit *(check how; `ciel` may support it)*, find its standard-cell Liberty file and netlists, read the Liberty header for how and with what tool it was produced, and run CharLib on its smallest inverter at the typical corner.
   Done when: `reports/m3c-ihp.md` gives the error table with point counts in both measures, and quotes whatever the header says about the tool that produced the file. If the kit cannot be fetched or run after three attempts, say why.
 
-- [ ] **3c.5 STOP — closing report.** `reports/m3c-closing.md`: state, with the numbers, whether the gap follows the kit (present on SkyWater, absent or different on IHP), follows the simulator (present on both), or cannot be told apart. Do not recommend. Stop.
+- [x] **3c.5 STOP — closing report.** `reports/m3c-closing.md`: state, with the numbers, whether the gap follows the kit (present on SkyWater, absent or different on IHP), follows the simulator (present on both), or cannot be told apart. Do not recommend. Stop.
 
 ## Milestone 4 — version 0 (branch `m4-v0`), only after the owner opens it
 
