@@ -107,3 +107,9 @@ What was done: generated 49 corrected-ramp inverter decks, ran them with four wo
 Command that proves it: `python work/m3b-run-grid.py`; `python checker/compare.py work/m3b-inv-grid.json <foundry.lib> --output work/m3b-inv-grid-comparison.csv`.
 Result: 49 of 49 simulations completed, 196 of 196 points compared. Overall median absolute error 14.9399%, worst 353.502%. Per-table medians: cell_fall 19.5153%, cell_rise 12.7534%, fall_transition 16.9830%, rise_transition 11.3403%. Error concentrates at small loads; worst at 1.5 ns input and 0.0005 pF.
 Surprises or open points: a fixed 5 ns window missed the 80% crossing at the fastest input/largest load; the window now scales with ramp and load. Native simulations use `ngspice_con.exe` directly with Python timeout enforcement.
+
+## 2026-11-16 — task 3b.4 — done
+What was done: confirmed no extracted inverter netlist ships in `spice/` or `cdl/`; built Magic 8.3.703 from source in Docker image `cellchar-magic:latest`, extracted the supplied Magic layout with junction geometry and 14 capacitors, and ran the same 49 points. Wrote `reports/m3b-parasitics.md`.
+Command that proves it: `magic -dnull -noconsole -T /pdk/sky130A/libs.tech/magic/sky130A.tech /work/work/m3b-extract.tcl`; `python work/m3b-run-grid-extracted.py`; `python checker/compare.py work/m3b-inv-grid-extracted.json <foundry.lib> --output work/m3b-inv-grid-extracted-comparison.csv`.
+Result: 196 of 196 points compared for each netlist. Overall median: schematic 14.9399%, extracted 14.3659%; worst: 353.502% versus 235.211%. Per-table figures in the report. Extracted decks verified to include `work/m3b-inv_1-extracted.spice`.
+Surprises or open points: bookworm Magic 8.3.105 segfaulted on the kit technology; current source worked. An initial runner substitution miss produced invalid identical results; those logs were deleted and the corrected run was verified.
