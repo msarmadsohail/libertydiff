@@ -65,3 +65,27 @@ What was done: repeated the hand-run inverter point with a 0.1 ps print step ins
 Command that proves it: `./.tools/envs/ngspice/Library/bin/ngspice_con.exe -b work/m2-inv_1-tight.cir -o work/m2-inv_1-tight.log` under `timeout 180`, then parse both logs and calculate `(tight-baseline)/baseline*100` for all four measurements.
 Result: delay_fall +0.002691%; delay_rise +0.000934%; transition_fall -0.021776%; transition_rise -0.001819%. Every movement is below 1%, so no new project defaults are required.
 Surprises or open points: tightening the numerical settings does not explain the much larger foundry differences measured in task 2.3.
+
+## 2026-11-16 — task 3.1 — done
+What was done: installed CharLib commit 987e90f under `.tools/`, built Docker image `cellchar-charlib:987e90f-trixie-np2` with ngspice 44.2, characterized all ten cells with four workers, and compared its Liberty output. Extended `checker/compare.py` for unquoted identifiers, comments, split timing groups and CharLib's reversed grid order; reran the 247,352-point foundry self-check with zero errors.
+Command that proves it: `docker run --rm -v <repo>:/work -v <pdk-version>:/pdk cellchar-charlib:987e90f-trixie-np2 charlib run /work/work/m3-charlib.yml --output /work/work/m3-charlib-results -j 4`; then `python checker/compare.py work/m3-charlib.lib <foundry.lib> --output work/m3-charlib-comparison.csv` and group absolute errors by cell.
+Result: 3,724 points across 10 of 10 cells; overall median absolute error 53.2228%, worst 6795.10%. Per-cell medians range 36.9028% to 62.1515%; full table and point counts in `reports/m3-charlib.md`. Elapsed 3,953.83 s for 7,509 operations.
+Surprises or open points: native Windows failed on Unix-only `fcntl`; bookworm provided ngspice 39 below CharLib's documented 44 minimum. NumPy 1 avoided a PySpice warning but lacked `trapezoid`; NumPy 2 completed successfully despite the warning. CharLib emits split rise/fall timing groups and reverses index_1/index_2 relative to the foundry.
+
+## 2026-11-16 — task 3.2 — done
+What was done: installed libretto commit 4ccaeb17 under `.tools/`, configured all ten cells, and ran it in the ngspice 44.2 Docker image with four threads. Diagnosed false-success runs, patched local include-path and working-directory handling, and inspected actual ngspice logs and processes. Wrote the precise failure account to `reports/m3-libretto.md`.
+Command that proves it: `docker run --rm -v <repo>:/work -v <pdk-version>:/pdk -w /work/.tools/src/libretto cellchar-charlib:987e90f-trixie-np2 python3 script/libretto.py -b /work/work/m3-libretto.cmd`; inspect `work/m3-libretto-run9.log`, generated `.lis` files and `docker top <container>`.
+Result: no valid comparison; 0 table points accepted. Initial runs failed every simulation while claiming success. After local fixes, 24 first-arc decks were generated, but four energy simulations each ran at 99% CPU for roughly 56–63 minutes without completing; the stalled container was stopped.
+Surprises or open points: libretto can exit 0 and claim ten cells after simulator launch failures, so its exit status alone is not evidence. The final blocker is non-terminating energy simulation, not a measured accuracy result.
+
+## 2026-11-16 — task 3.3 — done
+What was done: cloned `vyges-tools/char` and LibreCell `lctime` for source/README inspection only. Recorded licences, code layouts, claimed outputs, foundry-accuracy evidence and last-change dates in `reports/m3-others.md`.
+Command that proves it: `git -C .tools/src/vyges-char log -1 --format='%H %cs %s'`; `git -C .tools/src/lctime log -1 --format='%H %cs %s'`; inspect README, LICENSE/pyproject and `src/` layouts and search for accuracy/error/foundry comparisons.
+Result: char f3756457, Apache-2.0, last change 2026-11-15, narrative foundry errors but no full per-cell table. lctime e57d3c57, AGPL-3.0-or-later, last change 2026-04-30, no published foundry-accuracy figure found.
+Surprises or open points: char's README explicitly declines headline surrogate accuracy numbers but does include selected NLDM correlation percentages; the report distinguishes those from a complete per-cell benchmark.
+
+## 2026-11-16 — task 3.4 — done (STOP)
+What was done: wrote `reports/m3-decision.md` with the four hand-run errors, CharLib per-cell median/worst errors and point counts, runtimes, libretto's precise lack of results, source-review qualifications, and evidence for and against each of the three options. No direction selected.
+Command that proves it: verify the report exists and inspect its tables against `reports/m2-smoke.md`, `reports/m3-charlib.md`, `reports/m3-libretto.md` and `reports/m3-others.md`; `git diff --check`.
+Result: decision evidence report complete. Hand-run: 4 points, median 20.5335%, worst 31.8481%. CharLib: 3,724 points, median 53.2228%, worst 6795.10%, 3,953.83 s. libretto: no valid points, stalled energy simulations. Stopped at the milestone 3 stop gate.
+Surprises or open points: the measurements do not cleanly satisfy either the “existing tools already close” premise or the “hand-run point close” premise; the report leaves the choice to the owner.

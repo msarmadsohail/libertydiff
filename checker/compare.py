@@ -57,9 +57,11 @@ def table_values(body: str) -> list[float]:
 
 def read_liberty(path: Path) -> dict[tuple, Point]:
     text = path.read_text(encoding="utf-8")
+    text = re.sub(r"/\*.*?\*/", " ", text, flags=re.DOTALL)
     tokens = re.findall(r'"[^"\n]*"|[{}():;,\\]|[^\s{}():;,\\]+', text)
     points = {}
     cell = output = related = None
+    timing_related = None
     i = 0
 
     def skip_group(start: int) -> int:
@@ -77,17 +79,25 @@ def read_liberty(path: Path) -> dict[tuple, Point]:
     def parse_table(start: int, table: str) -> int:
         end = skip_group(start)
         body = " ".join(tokens[start + 1:end - 1])
+        nonlocal timing_related
         if "index_1" not in body or "values" not in body:
             return end
-        inputs = index(body, "index_1")
-        loads = index(body, "index_2")
+        arc_related = timing_related if timing_related is not None else related
+        first = index(body, "index_1")
+        second = index(body, "index_2")
+        if "input_net_transition" in body or "input_transition_time" in body:
+            inputs, loads = first, second
+        elif abs(first[0] - 0.01) < abs(second[0] - 0.01):
+            inputs, loads = first, second
+        else:
+            inputs, loads = second, first
         values = table_values(body)
         if len(values) != len(inputs) * len(loads):
-            raise ValueError(f"Wrong value count for {cell} {related}->{output} {table}")
+            raise ValueError(f"Wrong value count for {cell} {arc_related}->{output} {table}")
         for row, input_transition in enumerate(inputs):
             for column, load in enumerate(loads):
                 value = values[row * len(loads) + column]
-                point = Point(cell, f"{related}->{output}", table, input_transition, load, value)
+                point = Point(cell, f"{arc_related}->{output}", table, input_transition, load, value)
                 points[(cell, point.arc, table, row, column)] = point
         return end
 
@@ -95,6 +105,8 @@ def read_liberty(path: Path) -> dict[tuple, Point]:
         token = tokens[i]
         if token == "cell" and i + 1 < len(tokens) and tokens[i + 1] == "(":
             cell = tokens[i + 2].strip('"')
+            output = None
+            related = None
             i += 3
         elif token == "pin" and cell is not None and i + 1 < len(tokens) and tokens[i + 1] == "(":
             output = tokens[i + 2].strip('"')
@@ -105,7 +117,7 @@ def read_liberty(path: Path) -> dict[tuple, Point]:
         elif token == "timing":
             start = next(j for j in range(i, len(tokens)) if tokens[j] == "{")
             end = skip_group(start)
-            related = next(
+            timing_related = next(
                 (tokens[j + 2].strip('"') for j in range(start, end - 2)
                  if tokens[j] == "related_pin" and tokens[j + 1] == ":"),
                 None,
@@ -116,7 +128,7 @@ def read_liberty(path: Path) -> dict[tuple, Point]:
             i += 3
         elif token in ("internal_power", "leakage_power"):
             i = skip_group(next(j for j in range(i, len(tokens)) if tokens[j] == "{"))
-        elif token in TABLES and related is not None:
+        elif token in TABLES and (related is not None or timing_related is not None):
             while i < len(tokens) and tokens[i] != "{":
                 i += 1
             i = parse_table(i, token)

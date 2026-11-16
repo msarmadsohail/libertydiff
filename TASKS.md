@@ -38,16 +38,16 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 
 ## Milestone 3 — measure the existing tools (branch `m3-incumbents`)
 
-- [ ] **3.1 CharLib.** Install `stineje/CharLib` under `.tools/`, run it on the ten cells at the corner above, and run the checker on its output.
+- [x] **3.1 CharLib.** Install `stineje/CharLib` under `.tools/`, run it on the ten cells at the corner above, and run the checker on its output.
   Done when: `reports/m3-charlib.md` holds the per-cell error table, with the number of table points compared for each cell, or a precise account of why it could not be run.
 
-- [ ] **3.2 libretto.** Same for `snishizawa/libretto`.
+- [x] **3.2 libretto.** Same for `snishizawa/libretto`.
   Done when: `reports/m3-libretto.md` exists in the same form.
 
-- [ ] **3.3 Read the others.** Read the README and code layout of `vyges-tools/char` and of lctime from the LibreCell project (hosted on Codeberg) *(check the location)*. Do not install them.
+- [x] **3.3 Read the others.** Read the README and code layout of `vyges-tools/char` and of lctime from the LibreCell project (hosted on Codeberg) *(check the location)*. Do not install them.
   Done when: `reports/m3-others.md` states, for each, the licence, what it claims to produce, whether it publishes any accuracy figure against a foundry file, and the date of its last change.
 
-- [ ] **3.4 STOP — decision report.** Write `reports/m3-decision.md` with: the hand-run inverter errors from milestone 2; each existing tool's median and worst error per cell with the point counts; how long each took; and which of these three the numbers support:
+- [x] **3.4 STOP — decision report.** Write `reports/m3-decision.md` with: the hand-run inverter errors from milestone 2; each existing tool's median and worst error per cell with the point counts; how long each took; and which of these three the numbers support:
   1. an existing tool is already within a few percent everywhere, so contribute there;
   2. the hand-run point is itself far off, so the simulator is the limit;
   3. existing tools are well off but the hand-run point is close, so build.
