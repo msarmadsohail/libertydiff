@@ -87,11 +87,15 @@ def read_liberty(path: Path) -> dict[tuple, Point]:
         second = index(body, "index_2")
         if "input_net_transition" in body or "input_transition_time" in body:
             inputs, loads = first, second
+            values = table_values(body)
         elif abs(first[0] - 0.01) < abs(second[0] - 0.01):
             inputs, loads = first, second
+            values = table_values(body)
         else:
             inputs, loads = second, first
-        values = table_values(body)
+            values = table_values(body)
+            values = [values[column * len(inputs) + row]
+                      for row in range(len(inputs)) for column in range(len(loads))]
         if len(values) != len(inputs) * len(loads):
             raise ValueError(f"Wrong value count for {cell} {arc_related}->{output} {table}")
         for row, input_transition in enumerate(inputs):
