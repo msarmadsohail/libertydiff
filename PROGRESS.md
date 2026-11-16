@@ -119,3 +119,9 @@ What was done: inspected the ten worst original `inv_1` points and CharLib's ram
 Command that proves it: `charlib run /work/work/m3b-charlib-extracted.yml --output /work/work/m3b-charlib-extracted.lib -j 4 --filter 'sky130_fd_sc_hd__inv_1$'`; `python checker/compare.py work/m3b-charlib-extracted.lib <foundry.lib> --output work/m3b-charlib-extracted-comparison.csv`.
 Result: 196 points before and after. Overall median 14.9399% before (orientation corrected), 14.6039% after; worst 405.277% before, 260.480% after. Rerun 187.75 s for 395 operations.
 Surprises or open points: CharLib already scales the 20%-80% ramp correctly; the huge milestone 3 errors were primarily checker transposition, not CharLib's ramp. A subprocess-backend attempt failed on space-containing paths and was not used for the accepted result.
+
+## 2026-11-16 — task 3b.6 — done (STOP)
+What was done: wrote `reports/m3b-decision.md` using the corrected ramp, full schematic/extracted grids and configuration-only CharLib rerun. Explicitly invalidated the earlier ten-cell error table and made no new ten-cell claim. Stated evidence for all three options without choosing.
+Command that proves it: inspect `reports/m3b-decision.md` against `reports/m3b-ramp.md`, `reports/m3b-inv-grid.md`, `reports/m3b-parasitics.md` and `reports/m3b-charlib.md`; `git diff --check`.
+Result: revised report complete. Corrected single point median 8.98713% over 4 points; extracted hand grid median 14.3659% over 196 points; extracted CharLib median 14.6039% over 196 points. Stopped at the milestone 3b stop gate.
+Surprises or open points: hand-run and CharLib full-grid results are similar, so the evidence does not show a clear implementation advantage for building a new tool.

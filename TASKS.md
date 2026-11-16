@@ -72,7 +72,7 @@ An owner-side review of milestone 2 found the hand-run test bench was wrong, so 
 - [x] **3b.5 Re-check the CharLib measurement.** A worst error of 6795% is a setup fault, not an accuracy figure. Look at the ten worst points and find the cause (units, thresholds, how the input transition is defined, missing points). Change only the configuration, not CharLib's code, and rerun `inv_1` only.
   Done when: `reports/m3b-charlib.md` names the cause and gives the `inv_1` error table before and after, with point counts.
 
-- [ ] **3b.6 STOP — revised decision report.** Rewrite the evidence for the three options in `reports/m3b-decision.md` using the corrected numbers. Do not choose. Stop.
+- [x] **3b.6 STOP — revised decision report.** Rewrite the evidence for the three options in `reports/m3b-decision.md` using the corrected numbers. Do not choose. Stop.
 
 ## Milestone 4 — version 0 (branch `m4-v0`), only after the owner opens it
 
