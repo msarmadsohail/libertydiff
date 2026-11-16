@@ -125,3 +125,9 @@ What was done: wrote `reports/m3b-decision.md` using the corrected ramp, full sc
 Command that proves it: inspect `reports/m3b-decision.md` against `reports/m3b-ramp.md`, `reports/m3b-inv-grid.md`, `reports/m3b-parasitics.md` and `reports/m3b-charlib.md`; `git diff --check`.
 Result: revised report complete. Corrected single point median 8.98713% over 4 points; extracted hand grid median 14.3659% over 196 points; extracted CharLib median 14.6039% over 196 points. Stopped at the milestone 3b stop gate.
 Surprises or open points: hand-run and CharLib full-grid results are similar, so the evidence does not show a clear implementation advantage for building a new tool.
+
+## 2026-11-17 — task 3c.1 — done
+What was done: created branch `m3c-gap`; matched hand-run and CharLib extracted inverter points by table and canonical grid index, computed absolute generated-value differences and wrote `reports/m3c-agreement.md`.
+Command that proves it: Python CSV comparison of `work/m3b-inv-grid-extracted-comparison.csv` and `work/m3b-charlib-extracted-comparison.csv`, using seven known slew and load coordinates to canonicalize rounded CharLib labels.
+Result: 196 of 196 points matched. Median differences: cell_fall 0.189200 ps, cell_rise 0.295000 ps, fall_transition 0.946200 ps, rise_transition 0.468900 ps. Worst: 8.38200, 354.519, 241.055 and 208.029 ps respectively.
+Surprises or open points: only 40 keys matched before canonicalization because CharLib rounds grid labels. Largest method disagreement is at 1.5 ns input and 0.181284 pF, not a typical grid point.

@@ -78,7 +78,7 @@ An owner-side review of milestone 2 found the hand-run test bench was wrong, so 
 
 Milestone 3b showed a hand-written bench and CharLib landing on almost the same error (median about 14 to 15% over 196 points). Two independent methods agreeing with each other but not with the foundry file points at the models or the foundry file, not at the characteriser. These tasks test that.
 
-- [ ] **3c.1 Do the two methods agree with each other?** Compare, point by point, the hand-run extracted grid against the CharLib extracted rerun for `inv_1` (196 points).
+- [x] **3c.1 Do the two methods agree with each other?** Compare, point by point, the hand-run extracted grid against the CharLib extracted rerun for `inv_1` (196 points).
   Done when: `reports/m3c-agreement.md` gives the median and worst difference between the two methods, per table.
 
 - [ ] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `checker/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
