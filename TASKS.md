@@ -9,17 +9,17 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 
 ## Milestone 1 — tools and inputs (branch `m1-tools`)
 
-- [ ] **1.1 Install ngspice locally.** Try a micromamba environment under `.tools/` (`micromamba-win-64` from the mamba-org releases page, `MAMBA_ROOT_PREFIX` inside `.tools/`, package `ngspice` from conda-forge) *(check)*. Fall back to the official Windows build, then to Docker.
+- [x] **1.1 Install ngspice locally.** Try a micromamba environment under `.tools/` (`micromamba-win-64` from the mamba-org releases page, `MAMBA_ROOT_PREFIX` inside `.tools/`, package `ngspice` from conda-forge) *(check)*. Fall back to the official Windows build, then to Docker.
   Done when: `ngspice --version` prints a version, and a three-line RC circuit simulates and its measured time constant is within 1% of R×C.
 
-- [ ] **1.2 Fetch the SkyWater 130 nm kit.** Use the `ciel` package (formerly `volare`) *(check the command; fetch only what is needed if it supports that)* into `pdk/`.
+- [x] **1.2 Fetch the SkyWater 130 nm kit.** Use the `ciel` package (formerly `volare`) *(check the command; fetch only what is needed if it supports that)* into `pdk/`.
   Done when: these three files exist and their sizes are recorded *(check each path)*:
   the foundry Liberty file `sky130_fd_sc_hd__tt_025C_1v80.lib`, the cell netlists `sky130_fd_sc_hd.spice`, and the ngspice model file `sky130.lib.spice`.
 
-- [ ] **1.3 Write `scripts/env.ps1` and `scripts/env.sh`** that put the local tools on PATH for one shell and set a `PDK_ROOT` variable.
+- [x] **1.3 Write `scripts/env.ps1` and `scripts/env.sh`** that put the local tools on PATH for one shell and set a `PDK_ROOT` variable.
   Done when: a fresh shell that sources the script can run `ngspice --version`.
 
-- [ ] **1.4 Record the measurement rules.** Write `checker/read_rules.py`, which reads the foundry Liberty file header and prints: delay threshold, slew thresholds, slew derating factor if any, units, and for `inv_1` the input-transition grid and load-capacitance grid of its delay table. Save the output as `docs/measurement-rules.md`.
+- [x] **1.4 Record the measurement rules.** Write `checker/read_rules.py`, which reads the foundry Liberty file header and prints: delay threshold, slew thresholds, slew derating factor if any, units, and for `inv_1` the input-transition grid and load-capacitance grid of its delay table. Save the output as `docs/measurement-rules.md`.
   Done when: the file exists and every value in it is followed by the line number it came from.
 
 ## Milestone 2 — one point by hand (branch `m2-smoke`)
