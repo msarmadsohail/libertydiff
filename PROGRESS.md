@@ -83,3 +83,9 @@ What was done: cloned `vyges-tools/char` and LibreCell `lctime` for source/READM
 Command that proves it: `git -C .tools/src/vyges-char log -1 --format='%H %cs %s'`; `git -C .tools/src/lctime log -1 --format='%H %cs %s'`; inspect README, LICENSE/pyproject and `src/` layouts and search for accuracy/error/foundry comparisons.
 Result: char f3756457, Apache-2.0, last change 2026-11-15, narrative foundry errors but no full per-cell table. lctime e57d3c57, AGPL-3.0-or-later, last change 2026-04-30, no published foundry-accuracy figure found.
 Surprises or open points: char's README explicitly declines headline surrogate accuracy numbers but does include selected NLDM correlation percentages; the report distinguishes those from a complete per-cell benchmark.
+
+## 2026-11-16 — task 3.4 — done (STOP)
+What was done: wrote `reports/m3-decision.md` with the four hand-run errors, CharLib per-cell median/worst errors and point counts, runtimes, libretto's precise lack of results, source-review qualifications, and evidence for and against each of the three options. No direction selected.
+Command that proves it: verify the report exists and inspect its tables against `reports/m2-smoke.md`, `reports/m3-charlib.md`, `reports/m3-libretto.md` and `reports/m3-others.md`; `git diff --check`.
+Result: decision evidence report complete. Hand-run: 4 points, median 20.5335%, worst 31.8481%. CharLib: 3,724 points, median 53.2228%, worst 6795.10%, 3,953.83 s. libretto: no valid points, stalled energy simulations. Stopped at the milestone 3 stop gate.
+Surprises or open points: the measurements do not cleanly satisfy either the “existing tools already close” premise or the “hand-run point close” premise; the report leaves the choice to the owner.
