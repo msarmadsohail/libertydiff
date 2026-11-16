@@ -35,3 +35,9 @@ What was done: wrote `scripts/env.ps1` and `scripts/env.sh` to prepend the local
 Command that proves it: `powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ". '.\scripts\env.ps1'; ngspice --version; Write-Output ('PDK_ROOT=' + `$env:PDK_ROOT)"` and `& 'C:\Program Files\Git\bin\bash.exe' -c 'source scripts/env.sh && ngspice_con.exe --version && echo "PDK_ROOT=$PDK_ROOT"'`.
 Result: both fresh shells printed ngspice-41 and the repository-local PDK_ROOT.
 Surprises or open points: this machine's PowerShell execution policy blocks scripts by default, so the fresh-shell check uses a process-only `-ExecutionPolicy Bypass`; no system setting was changed. PowerShell uses the console-wrapper command `ngspice`; Bash calls `ngspice_con.exe` directly.
+
+## 2026-11-16 — task 1.4 — done
+What was done: wrote `checker/read_rules.py`, which reads the foundry Liberty header and the `inv_1` `cell_fall` table and prints thresholds, slew derating, units and both grids with source line numbers. Generated `docs/measurement-rules.md` from its output.
+Command that proves it: `python checker/read_rules.py pdk/ciel/sky130/versions/e7a6777d157a9d94c7ac757457b9e4309e9e9000/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib | Tee-Object docs/measurement-rules.md`; then parse every `.lib:<line>` reference and check it is within the 12,841,637-byte source file, and run `python -m py_compile checker/read_rules.py`.
+Result: document contains 18 valid source-line references covering every reported value; Python syntax check passed. Delay thresholds are 50%, slew thresholds 20%/80%, slew derating 1.0, and each delay grid has 7 points.
+Surprises or open points: the delay table's input grid differs slightly from the similarly named internal-power grid; the reader deliberately selects `cell_fall`, not the power table.

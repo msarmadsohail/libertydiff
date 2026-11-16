@@ -19,7 +19,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **1.3 Write `scripts/env.ps1` and `scripts/env.sh`** that put the local tools on PATH for one shell and set a `PDK_ROOT` variable.
   Done when: a fresh shell that sources the script can run `ngspice --version`.
 
-- [ ] **1.4 Record the measurement rules.** Write `checker/read_rules.py`, which reads the foundry Liberty file header and prints: delay threshold, slew thresholds, slew derating factor if any, units, and for `inv_1` the input-transition grid and load-capacitance grid of its delay table. Save the output as `docs/measurement-rules.md`.
+- [x] **1.4 Record the measurement rules.** Write `checker/read_rules.py`, which reads the foundry Liberty file header and prints: delay threshold, slew thresholds, slew derating factor if any, units, and for `inv_1` the input-transition grid and load-capacitance grid of its delay table. Save the output as `docs/measurement-rules.md`.
   Done when: the file exists and every value in it is followed by the line number it came from.
 
 ## Milestone 2 — one point by hand (branch `m2-smoke`)
