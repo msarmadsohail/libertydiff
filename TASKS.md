@@ -63,7 +63,7 @@ An owner-side review of milestone 2 found the hand-run test bench was wrong, so 
 - [x] **3b.2 Load the models the kit's way.** Replace the four hand-picked model includes with the kit's top-level file `sky130.lib.spice`, section `tt`, and rerun the same point.
   Done when: the report states how much each of the four numbers moved.
 
-- [ ] **3b.3 Full inverter grid.** Run all 49 points of `inv_1` for the four tables (196 points) with the corrected bench.
+- [x] **3b.3 Full inverter grid.** Run all 49 points of `inv_1` for the four tables (196 points) with the corrected bench.
   Done when: `reports/m3b-inv-grid.md` gives median and worst error per table, and says where the error concentrates (small loads, large loads, fast inputs, slow inputs).
 
 - [ ] **3b.4 Parasitics.** The kit's `inv_1` netlist has two transistors and no wiring capacitance or junction areas, while the foundry table came from an extracted layout. Find out whether the kit ships extracted netlists. If not, extract `inv_1` from its layout under `libs.ref/sky130_fd_sc_hd/mag` with Magic (in Docker if needed), including parasitic capacitance, and rerun task 3b.3 on the extracted netlist.

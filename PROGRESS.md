@@ -101,3 +101,9 @@ What was done: replaced the four model includes with `sky130.lib.spice` section 
 Command that proves it: `docker run --rm -v <repo>:/work -v <pdk-version>:/pdk cellchar-charlib:987e90f-trixie-np2 sh -c 'timeout 300 ngspice -b /work/work/m3b-inv_1-kitmodels-pruned.cir -o /work/work/m3b-inv_1-kitmodels-pruned.log'`; parse all four values and compare with `work/m3b-inv_1-ramp.log`.
 Result: exit 0; all four values identical at printed precision (0.000000000% movement). The direct full top-level include remains unusable due to unrelated-model formula errors.
 Surprises or open points: nested includes require running from the kit's ngspice directory; excluding unused device families was necessary for successful elaboration. No transistor model parameter was edited.
+
+## 2026-11-16 — task 3b.3 — done
+What was done: generated 49 corrected-ramp inverter decks, ran them with four workers and a 180 s Python timeout per deck, collected 196 table values, compared with the foundry and wrote `reports/m3b-inv-grid.md` with per-table and per-grid-coordinate errors.
+Command that proves it: `python work/m3b-run-grid.py`; `python checker/compare.py work/m3b-inv-grid.json <foundry.lib> --output work/m3b-inv-grid-comparison.csv`.
+Result: 49 of 49 simulations completed, 196 of 196 points compared. Overall median absolute error 14.9399%, worst 353.502%. Per-table medians: cell_fall 19.5153%, cell_rise 12.7534%, fall_transition 16.9830%, rise_transition 11.3403%. Error concentrates at small loads; worst at 1.5 ns input and 0.0005 pF.
+Surprises or open points: a fixed 5 ns window missed the 80% crossing at the fastest input/largest load; the window now scales with ramp and load. Native simulations use `ngspice_con.exe` directly with Python timeout enforcement.
