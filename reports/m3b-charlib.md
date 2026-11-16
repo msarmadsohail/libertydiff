@@ -27,5 +27,5 @@ Commands:
 
 ```sh
 charlib run /work/work/m3b-charlib-extracted.yml --output /work/work/m3b-charlib-extracted.lib -j 4 --filter 'sky130_fd_sc_hd__inv_1$'
-python checker/compare.py work/m3b-charlib-extracted.lib <foundry.lib> --output work/m3b-charlib-extracted-comparison.csv
+python libertydiff/compare.py work/m3b-charlib-extracted.lib <foundry.lib> --output work/m3b-charlib-extracted-comparison.csv
 ```

@@ -27,7 +27,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **2.1 Simulate one inverter point.** Hand-write a test bench for `inv_1`: one input transition time and one load taken from the middle of the grid in `docs/measurement-rules.md`, rising and falling input.
   Done when: ngspice runs without errors and prints both delays and both output transition times, measured at the thresholds from task 1.4.
 
-- [x] **2.2 Write the checker.** `checker/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
+- [x] **2.2 Write the checker.** `libertydiff/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
   Done when: fed the foundry file against itself it reports zero error at every point, and fed a copy with one value changed by 10% it reports exactly that point.
 
 - [x] **2.3 Compare the hand-run point.** Run the checker on the result of 2.1.
@@ -81,7 +81,7 @@ Milestone 3b showed a hand-written bench and CharLib landing on almost the same 
 - [x] **3c.1 Do the two methods agree with each other?** Compare, point by point, the hand-run extracted grid against the CharLib extracted rerun for `inv_1` (196 points).
   Done when: `reports/m3c-agreement.md` gives the median and worst difference between the two methods, per table.
 
-- [x] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `checker/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
+- [x] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `libertydiff/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
   Done when: the `inv_1` extracted grid is re-reported with both measures, and the report states how many of the 196 points are off by more than 10% and also by more than 5 ps.
 
 - [x] **3c.3 A second cell.** Run CharLib on `nand2_1` with the schematic netlist and compare with the corrected checker.
