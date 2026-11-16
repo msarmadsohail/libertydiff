@@ -59,3 +59,9 @@ What was done: converted the four task 2.1 measurements to JSON, ran the checker
 Command that proves it: `python checker/compare.py work/m2-inv_1.json pdk/ciel/sky130/versions/e7a6777d157a9d94c7ac757457b9e4309e9e9000/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib --output work/m2-inv_1-comparison.csv`.
 Result: 4 points compared. cell_fall -31.8481%; cell_rise -11.6454%; fall_transition -29.4216%; rise_transition +1.96942%. Median absolute error 20.5335%, worst 31.8481%.
 Surprises or open points: three of four hand-run values are substantially faster than the foundry values; no correction factor has been applied.
+
+## 2026-11-16 — task 2.4 — done
+What was done: repeated the hand-run inverter point with a 0.1 ps print step instead of 1 ps and `reltol=1e-5 abstol=1e-15 vntol=1e-8 trtol=1`; appended the four movements to `reports/m2-smoke.md`.
+Command that proves it: `./.tools/envs/ngspice/Library/bin/ngspice_con.exe -b work/m2-inv_1-tight.cir -o work/m2-inv_1-tight.log` under `timeout 180`, then parse both logs and calculate `(tight-baseline)/baseline*100` for all four measurements.
+Result: delay_fall +0.002691%; delay_rise +0.000934%; transition_fall -0.021776%; transition_rise -0.001819%. Every movement is below 1%, so no new project defaults are required.
+Surprises or open points: tightening the numerical settings does not explain the much larger foundry differences measured in task 2.3.

@@ -28,3 +28,16 @@ Command:
 ```powershell
 python checker\compare.py work\m2-inv_1.json pdk\ciel\sky130\versions\e7a6777d157a9d94c7ac757457b9e4309e9e9000\sky130A\libs.ref\sky130_fd_sc_hd\lib\sky130_fd_sc_hd__tt_025C_1v80.lib --output work\m2-inv_1-comparison.csv
 ```
+
+## Simulator sensitivity
+
+The tightened run used `.tran 0.0001n 5n` (0.1 ps print step), `.option reltol=1e-5 abstol=1e-15 vntol=1e-8 trtol=1`, and otherwise identical settings.
+
+| Measurement | Baseline (ns) | Tightened (ns) | Movement |
+|---|---:|---:|---:|
+| `delay_fall` | 0.059468000 | 0.059469600 | +0.002691% |
+| `delay_rise` | 0.107017000 | 0.107018000 | +0.000934% |
+| `transition_fall` | 0.042248300 | 0.042239100 | -0.021776% |
+| `transition_rise` | 0.093482400 | 0.093480700 | -0.001819% |
+
+All four movements are below 1%, so no tighter project defaults are required by this check.

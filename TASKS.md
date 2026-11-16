@@ -33,7 +33,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **2.3 Compare the hand-run point.** Run the checker on the result of 2.1.
   Done when: `reports/m2-smoke.md` states the four percentage errors and the exact simulator options used.
 
-- [ ] **2.4 Simulator sensitivity.** Repeat 2.1 with a tighter time step and tighter tolerances.
+- [x] **2.4 Simulator sensitivity.** Repeat 2.1 with a tighter time step and tighter tolerances.
   Done when: the report states how much the four numbers moved. If they moved by more than 1%, find settings where they stop moving and record them as the project defaults.
 
 ## Milestone 3 — measure the existing tools (branch `m3-incumbents`)
