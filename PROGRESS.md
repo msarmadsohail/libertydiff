@@ -29,3 +29,9 @@ What was done: used ciel 3.2.0 to fetch sky130A version e7a6777d157a9d94c7ac7574
 Command that proves it: `$root = 'pdk/ciel/sky130/versions/e7a6777d157a9d94c7ac757457b9e4309e9e9000/sky130A'; Get-Item "$root/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib", "$root/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice", "$root/libs.tech/ngspice/sky130.lib.spice" | Select-Object FullName,Length`.
 Result: foundry Liberty 12,841,637 bytes; cell netlists 926,412 bytes; ngspice model file 16,541 bytes. All three paths exist under the sky130A variant.
 Surprises or open points: ciel 3.2.0 failed on Windows with WinError 32 because its Zstandard archive stream remained open during cleanup. A local source copy closes that stream with a context manager; the retry succeeded. The fetch also populated sky130B from the common archive, but the recorded inputs are specifically sky130A.
+
+## 2026-11-16 — task 1.3 — done
+What was done: wrote `scripts/env.ps1` and `scripts/env.sh` to prepend the local ngspice tools to PATH for the current shell and set `PDK_ROOT` to the fetched version directory and `PDK` to `sky130A`.
+Command that proves it: `powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ". '.\scripts\env.ps1'; ngspice --version; Write-Output ('PDK_ROOT=' + `$env:PDK_ROOT)"` and `& 'C:\Program Files\Git\bin\bash.exe' -c 'source scripts/env.sh && ngspice_con.exe --version && echo "PDK_ROOT=$PDK_ROOT"'`.
+Result: both fresh shells printed ngspice-41 and the repository-local PDK_ROOT.
+Surprises or open points: this machine's PowerShell execution policy blocks scripts by default, so the fresh-shell check uses a process-only `-ExecutionPolicy Bypass`; no system setting was changed. PowerShell uses the console-wrapper command `ngspice`; Bash calls `ngspice_con.exe` directly.
