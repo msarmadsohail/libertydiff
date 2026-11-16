@@ -92,22 +92,67 @@ Milestone 3b showed a hand-written bench and CharLib landing on almost the same 
 
 - [x] **3c.5 STOP — closing report.** `reports/m3c-closing.md`: state, with the numbers, whether the gap follows the kit (present on SkyWater, absent or different on IHP), follows the simulator (present on both), or cannot be told apart. Do not recommend. Stop.
 
-## Milestone 4 — version 0 (branch `m4-v0`), only after the owner opens it
+## Change of direction (owner, 2026-11-17)
 
-- [ ] **4.1 Fix the held-out list.** Write `checker/heldout.txt` with four of the ten cells, chosen by the owner. Code under `cellchar/` is developed against the other six only.
-- [ ] **4.2 Netlist reader.** `cellchar/netlist.py` extracts one cell's sub-circuit and its pin list from the kit's netlist file.
-  Done when: unit tests cover all ten cells and the pin lists match the kit's own cell documentation.
-- [ ] **4.3 Arc finder.** Given a cell's logic function, list every input-to-output path and the values of the other inputs that let it switch.
-  Done when: unit tests cover all ten cells; `xor2_1` has both of its non-unate arcs.
-- [ ] **4.4 Test-bench writer.** Generate the ngspice deck for one arc, one input transition, one load, using the project default options from task 2.4.
-  Done when: the generated deck for the 2.1 point gives the same four numbers as the hand-written one, within 0.1%.
-- [ ] **4.5 Runner.** Run all points of a cell in parallel, with a timeout per run and a retry, and collect the measurements.
-  Done when: `inv_1` completes and the run time and failure count are recorded.
-- [ ] **4.6 Liberty writer.** Write delay tables, transition tables and input pin capacitance in Liberty syntax.
-  Done when: the checker parses the output without errors.
-- [ ] **4.7 Six-cell run.** Characterise the six development cells and run the checker.
-  Done when: `reports/m4-dev.md` holds the per-cell error table with point counts.
-- [ ] **4.8 STOP — held-out run.** Characterise the four held-out cells once, with no code changes afterwards, and write `reports/m4-heldout.md`. Stop.
+Milestones 1 to 3c answered the original question: a new characteriser is not worth building, because CharLib already matches an independent hand bench at 196 of 196 points, and the remaining error follows the chip kit. The old milestone 4 (build a characteriser) is cancelled.
 
-## Out of scope until the owner opens it
-Flip-flops and latches, setup and hold times, power and leakage, other corners, GF 180 nm and IHP 130 nm, the CCS model, a second check with OpenSTA, packaging and a public release.
+What is worth publishing is what this repository already half is: **a tool that compares Liberty files point by point, and a reproducible benchmark of how closely open tools reproduce the foundry Liberty files on open chip kits.** Nobody publishes that table. Milestones 5 to 8 build it. Read `docs/SPEC.md` before starting.
+
+There are no stop gates until task 8.5. If a task is blocked after three honest attempts, mark it `BLOCKED`, record why, and go on to the next task that does not depend on it.
+
+## Milestone 5 — the comparison tool as a package (branch `m5-package`)
+
+- [ ] **5.1 Package layout.** Move the comparison code into a Python package `libertydiff/` with a `pyproject.toml` (name `libertydiff`, Apache-2.0, Python 3.10+, no dependencies outside the standard library unless one is justified in `PROGRESS.md`). Keep `checker/` as a thin wrapper or remove it and update every reference.
+  Done when: `pip install -e .` works in a fresh virtual environment under `.venv/` and `python -m libertydiff --help` prints usage.
+
+- [ ] **5.2 Liberty reader.** One reader that returns, for every cell, pin, timing arc and table: the two axes with their variable names, the values, and the units from the library header. It must handle both axis orders (input transition first or load first), scalar tables, and quoted multi-line value lists.
+  Done when: unit tests pass on small hand-written Liberty snippets for each of those cases, and the reader parses the SkyWater and IHP foundry files completely, reporting the cell and table counts.
+
+- [ ] **5.3 Comparison.** `libertydiff compare A.lib B.lib` matches cells, arcs and tables between two files, aligns axes by variable name not by position, and reports each point's value in both files, the percentage difference and the absolute difference in picoseconds. Points present in only one file are listed, never silently dropped. Options: `--cells` to restrict, `--csv` and `--json` outputs, `--summary` for median and worst per cell and per table.
+  Done when: a file compared with itself gives zero at every point; a copy with one value changed by 10% reports exactly that point; a copy with axes swapped and values transposed reports zero difference; unit tests cover all three.
+
+- [ ] **5.4 Honest summaries.** The summary always prints the number of points compared and the number unmatched, and gives both percentage and picosecond figures. Add `--min-abs` so that points whose absolute difference is below a threshold can be reported separately, because a large percentage of a near-zero delay is not a meaningful error.
+  Done when: unit tests cover the counts and the threshold, and the SkyWater `inv_1` comparison from milestone 3c is reproduced to the same figures.
+
+- [ ] **5.5 Tests.** `pytest` runs the whole test suite in under a minute with no chip kit installed (tests use small fixtures under `tests/fixtures/`, never the foundry files).
+  Done when: `pytest` passes in the fresh virtual environment and the number of tests is recorded.
+
+## Milestone 6 — the benchmark harness (branch `m6-harness`)
+
+- [ ] **6.1 One pinned container.** A single `docker/Dockerfile` with pinned versions of ngspice, Magic and CharLib (by commit), building reproducibly. Record the image digest.
+  Done when: the image builds from scratch and `docker run` prints the three versions.
+
+- [ ] **6.2 Benchmark definition.** `bench/benchmark.toml` lists, per chip kit: kit version, library, corner, foundry Liberty file, netlist source, and the cells. Start from: SkyWater `sky130_fd_sc_hd` with the ten cells used in milestone 3, and IHP `sg13g2_stdcell` with its ten nearest equivalents *(check the names)*.
+  Done when: a script validates the file and confirms every listed cell exists in its kit's netlist and foundry Liberty file.
+
+- [ ] **6.3 Runner.** `python -m bench.run --kit <name> [--cells ...]` fetches the kit if missing, runs CharLib in the container for each cell with the correct 20%-to-80% input transition and the foundry file's own grid, saves the generated Liberty file and a run record (versions, wall time, failures) under `work/`, and resumes after interruption without redoing finished cells.
+  Done when: it reproduces the milestone 3c figures for SkyWater `inv_1` (schematic netlist) and IHP `sg13g2_inv_1` within 0.1 percentage point of the median.
+
+- [ ] **6.4 Results tables.** `python -m bench.report` runs `libertydiff` on every finished cell and writes `results/<kit>.csv` (one row per point) and `results/<kit>.md` (one row per cell and table: points compared, points unmatched, median and worst in percent and picoseconds).
+  Done when: both files exist for both kits and the Markdown tables carry the point counts.
+
+- [ ] **6.5 Independent cross-check.** Keep the hand-written bench from milestone 3b as `bench/handbench.py`, able to run one cell's full grid without CharLib. Run it for one inverter per kit.
+  Done when: `results/crosscheck.md` gives, per kit, the median and worst difference between CharLib and the hand bench over the stated number of points.
+
+## Milestone 7 — run it (branch `m7-results`)
+
+- [ ] **7.1 SkyWater, ten cells, schematic netlists.**
+  Done when: `results/sky130_fd_sc_hd.md` covers all ten cells, or names each cell that failed and why.
+- [ ] **7.2 SkyWater, ten cells, extracted netlists.** Extract each cell with Magic including parasitic capacitance and rerun.
+  Done when: the results file shows schematic against extracted, per cell.
+- [ ] **7.3 IHP, ten cells.**
+  Done when: `results/sg13g2_stdcell.md` covers all ten or names the failures.
+- [ ] **7.4 A third kit if it is cheap.** Try GF 180 nm (`gf180mcu_fd_sc_mcu7t5v0`) with five cells. Give it three attempts; if the kit or models will not run, record why and move on.
+- [ ] **7.5 Second corner.** For each kit that worked, one slow and one fast corner on the inverter only, to show whether the gap moves with corner.
+  Done when: the results state the figures per corner with point counts.
+
+## Milestone 8 — make it publishable (branch `m8-release`)
+
+- [ ] **8.1 README.** What the tool does, a two-minute quick start for `libertydiff compare`, how to reproduce the benchmark, the headline results table with point counts, and a "What this does not show" section taken from `docs/SPEC.md`. No claim that any tool or kit is wrong: the tables state differences, not blame.
+- [ ] **8.2 Findings page.** `docs/findings.md`: the measured differences per kit, the two early mistakes that produced wrong figures (the ramp definition and the table orientation) and how they were caught, and what remains unexplained.
+- [ ] **8.3 Licence and notices.** Apache-2.0 `LICENSE`. CharLib, ngspice and Magic are used as external tools inside the container and are not copied into this repository; state their licences and pinned versions in `docs/third-party.md`. Do not commit any foundry file. *(Check that the kits' licences allow publishing generated Liberty files; if unsure, publish the difference tables only and say so.)*
+- [ ] **8.4 Continuous testing.** `.github/workflows/tests.yml` running `pytest` on Python 3.10 and 3.12. It cannot run until the owner publishes; verify it locally by running the same commands.
+- [ ] **8.5 STOP — release candidate.** Create a branch `release` from `main` whose tree contains only what a user of the tool needs: `libertydiff/`, `bench/`, `docker/`, `tests/`, `results/`, `docs/findings.md`, `docs/third-party.md`, `README.md`, `LICENSE`, `pyproject.toml`, `.github/workflows/`, `.gitignore`. It must not contain `AGENTS.md`, `TASKS.md`, `PROGRESS.md`, `.github/agents/`, `.github/copilot-instructions.md`, `docs/BLUEPRINT.md`, `docs/SPEC.md`, `reports/` or `checker/`. Confirm `pytest` passes on that branch. Write `reports/m8-release.md` on `main` listing what is in the branch, every task that was blocked, and every figure in the README with the file it came from. Do not push. Stop.
+
+## Out of scope
+Writing a new characteriser. Flip-flops and latches, setup and hold times, power and leakage tables, the CCS model, a check with OpenSTA, publishing to PyPI, pushing to any remote.
