@@ -185,3 +185,9 @@ What was done: moved the comparison fixture to `tests/fixtures/basic.lib`, confi
 Command that proves it: `.venv/Scripts/python.exe -m pytest -q` with elapsed time measured by PowerShell `Measure-Command`.
 Result: 10 tests passed in 0.07 s (0.689 s wall time including process startup), below one minute.
 Surprises or open points: unrestricted pytest initially collected KLayout/OpenEMS tests inside downloaded `pdk/`; `testpaths = ["tests"]` prevents that external dependency.
+
+## 2026-11-17 — task 6.1 — done
+What was done: added `docker/Dockerfile` with digest-pinned Python 3.12 trixie base, Debian ngspice 44.2+ds-1, Magic commit 2c6d97b2f21003fa1778d5658eb02b32724399ab, CharLib commit 987e90f5286b11c3a548749f93b689a7b8723003 and modified PySpice commit da81c4d013c9140c8833711be05c52299b260e16. Built with `--no-cache` and saved the image digest in `docker/image-digest.txt`.
+Command that proves it: `docker build --no-cache -f docker/Dockerfile -t cellchar-bench:m6 .`; `docker run --rm cellchar-bench:m6`; `docker image inspect cellchar-bench:m6 --format '{{.Id}}'`.
+Result: from-scratch build succeeded. Printed ngspice-44.2, Magic 8.3.703 and CharLib usage. Image digest `sha256:b9c8b1b1733e315fb2b78f7b7fb379d1468a90d7a729c6a31547034929e7eb2c`.
+Surprises or open points: modified PySpice still emits its NumPy compatibility warning but CharLib starts and prints usage.
