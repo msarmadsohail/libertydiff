@@ -95,3 +95,9 @@ What was done: created branch `m3b-bench`; changed only the hand bench's full in
 Command that proves it: `./.tools/envs/ngspice/Library/bin/ngspice_con.exe -b work/m3b-inv_1-ramp.cir -o work/m3b-inv_1-ramp.log` under `timeout 180`; `python checker/compare.py work/m3b-inv_1-ramp.json <foundry.lib> --output work/m3b-inv_1-ramp-comparison.csv`.
 Result: 4 points. Errors changed from -31.8481%, -11.6454%, -29.4216%, +1.96942% to -15.1304%, +7.62445%, -10.3498%, +4.18491%. Median absolute error 20.5335% before, 8.98713% after.
 Surprises or open points: results match the owner review's approximate values; no model, load or threshold setting changed.
+
+## 2026-11-16 — task 3b.2 — done
+What was done: replaced the four model includes with `sky130.lib.spice` section `tt` and attempted native and Linux runs from the correct nested-include directory. Diagnosed fatal elaboration in unrelated device models, then ran a scratch `tt` entry containing the kit's two required transistor models, mismatch files and non-FET parameters. Wrote `reports/m3b-models.md`.
+Command that proves it: `docker run --rm -v <repo>:/work -v <pdk-version>:/pdk cellchar-charlib:987e90f-trixie-np2 sh -c 'timeout 300 ngspice -b /work/work/m3b-inv_1-kitmodels-pruned.cir -o /work/work/m3b-inv_1-kitmodels-pruned.log'`; parse all four values and compare with `work/m3b-inv_1-ramp.log`.
+Result: exit 0; all four values identical at printed precision (0.000000000% movement). The direct full top-level include remains unusable due to unrelated-model formula errors.
+Surprises or open points: nested includes require running from the kit's ngspice directory; excluding unused device families was necessary for successful elaboration. No transistor model parameter was edited.
