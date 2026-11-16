@@ -131,3 +131,9 @@ What was done: created branch `m3c-gap`; matched hand-run and CharLib extracted 
 Command that proves it: Python CSV comparison of `work/m3b-inv-grid-extracted-comparison.csv` and `work/m3b-charlib-extracted-comparison.csv`, using seven known slew and load coordinates to canonicalize rounded CharLib labels.
 Result: 196 of 196 points matched. Median differences: cell_fall 0.189200 ps, cell_rise 0.295000 ps, fall_transition 0.946200 ps, rise_transition 0.468900 ps. Worst: 8.38200, 354.519, 241.055 and 208.029 ps respectively.
 Surprises or open points: only 40 keys matched before canonicalization because CharLib rounds grid labels. Largest method disagreement is at 1.5 ns input and 0.181284 pF, not a typical grid point.
+
+## 2026-11-17 — task 3c.2 — done
+What was done: added signed `absolute_error_ps` to checker CSV output and median/worst picosecond summaries to its console output. Re-ran identity and 10% perturbation tests and re-reported the extracted inverter grid in `reports/m3c-absolute.md`.
+Command that proves it: `python checker/compare.py <foundry.lib> <foundry.lib> --output work/m3c-self.csv`; `python checker/compare.py work/m2-modified.lib <foundry.lib> --output work/m3c-modified.csv`; `python checker/compare.py work/m3b-inv-grid-extracted.json <foundry.lib> --output work/m3c-inv-grid-extracted.csv`; assert both test cases and count thresholds.
+Result: identity 247,352 points at zero in both measures; perturbation exactly one point at 10% and 1.43656 ps. Extracted grid: 196 points, median 14.3659% and 15.8202 ps, worst 235.211% and 408.860 ps; 127 points exceed both 10% and 5 ps.
+Surprises or open points: no cell_fall point exceeds both thresholds despite the 235.211% worst percentage, confirming that near-zero-delay percentages can be misleading.

@@ -187,7 +187,8 @@ def main() -> None:
             foundry_point = foundry[key]
         else:
             foundry_point = match_foundry(generated_point, foundry_by_value)
-        error = (generated_point.value - foundry_point.value) / foundry_point.value * 100
+        absolute_ps = (generated_point.value - foundry_point.value) * 1000
+        error = absolute_ps / 1000 / foundry_point.value * 100
         rows.append({
             "cell": generated_point.cell,
             "arc": generated_point.arc,
@@ -195,6 +196,7 @@ def main() -> None:
             "point": f"{generated_point.input_transition:g},{generated_point.load:g}",
             "generated": generated_point.value,
             "foundry": foundry_point.value,
+            "absolute_error_ps": absolute_ps,
             "percentage_error": error,
         })
     with args.output.open("w", newline="", encoding="utf-8") as stream:
@@ -202,10 +204,13 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
     errors = [abs(row["percentage_error"]) for row in rows]
+    absolute_errors = [abs(row["absolute_error_ps"]) for row in rows]
     print(f"Compared {len(rows)} points; report: {args.output}")
     if errors:
         print(f"Median absolute error: {statistics.median(errors):.6g}%")
         print(f"Worst absolute error: {max(errors):.6g}%")
+        print(f"Median absolute error: {statistics.median(absolute_errors):.6g} ps")
+        print(f"Worst absolute error: {max(absolute_errors):.6g} ps")
         for row in rows:
             if abs(row["percentage_error"]) > 1e-9:
                 print(row)

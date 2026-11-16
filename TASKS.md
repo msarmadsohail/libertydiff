@@ -81,7 +81,7 @@ Milestone 3b showed a hand-written bench and CharLib landing on almost the same 
 - [x] **3c.1 Do the two methods agree with each other?** Compare, point by point, the hand-run extracted grid against the CharLib extracted rerun for `inv_1` (196 points).
   Done when: `reports/m3c-agreement.md` gives the median and worst difference between the two methods, per table.
 
-- [ ] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `checker/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
+- [x] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `checker/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
   Done when: the `inv_1` extracted grid is re-reported with both measures, and the report states how many of the 196 points are off by more than 10% and also by more than 5 ps.
 
 - [ ] **3c.3 A second cell.** Run CharLib on `nand2_1` with the schematic netlist and compare with the corrected checker.
