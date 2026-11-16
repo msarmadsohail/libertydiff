@@ -26,5 +26,5 @@ Commands:
 
 ```sh
 python work/m3b-run-grid-extracted.py
-python checker/compare.py work/m3b-inv-grid-extracted.json <foundry.lib> --output work/m3b-inv-grid-extracted-comparison.csv
+python libertydiff/compare.py work/m3b-inv-grid-extracted.json <foundry.lib> --output work/m3b-inv-grid-extracted-comparison.csv
 ```

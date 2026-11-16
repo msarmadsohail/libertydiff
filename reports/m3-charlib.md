@@ -25,6 +25,6 @@ Each single-input cell contributes four tables × 49 points; each two-input cell
 - The image uses NumPy 2.5.5. PySpice emits a binary-compatibility warning on import, but the run exits 0 and writes all ten cells. NumPy 1 could not be used because this CharLib revision calls `numpy.trapezoid`.
 - The model include selects only typical `nfet_01v8` and `pfet_01v8_hvt` models, sets `ngbehavior=ps`, `scale=1e-6`, and disables mismatch. These are the same physical model settings as the hand-run bench.
 - Command: `docker run --rm -v <repo>:/work -v <pdk-version>:/pdk cellchar-charlib:987e90f-trixie-np2 charlib run /work/work/m3-charlib.yml --output /work/work/m3-charlib-results -j 4`.
-- Comparison: `python checker/compare.py work/m3-charlib.lib <foundry.lib> --output work/m3-charlib-comparison.csv`.
+- Comparison: `python libertydiff/compare.py work/m3-charlib.lib <foundry.lib> --output work/m3-charlib-comparison.csv`.
 
 The very large worst errors are measured results, not clipped or adjusted values. They should be interpreted alongside the hand-run result and the grid/arc conventions before choosing a project direction.

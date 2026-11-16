@@ -16,5 +16,5 @@ Commands:
 
 ```sh
 charlib run /work/work/m3-charlib.yml --output /work/work/m3c-nand2.lib -j 4 --filter 'sky130_fd_sc_hd__nand2_1$'
-python checker/compare.py work/m3c-nand2.lib <foundry.lib> --output work/m3c-nand2-comparison.csv
+python libertydiff/compare.py work/m3c-nand2.lib <foundry.lib> --output work/m3c-nand2-comparison.csv
 ```

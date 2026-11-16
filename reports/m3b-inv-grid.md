@@ -40,5 +40,5 @@ Commands:
 
 ```sh
 python work/m3b-run-grid.py
-python checker/compare.py work/m3b-inv-grid.json <foundry.lib> --output work/m3b-inv-grid-comparison.csv
+python libertydiff/compare.py work/m3b-inv-grid.json <foundry.lib> --output work/m3b-inv-grid-comparison.csv
 ```

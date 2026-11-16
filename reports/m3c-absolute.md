@@ -1,6 +1,6 @@
 # Extracted `inv_1`: percentage and absolute error
 
-`checker/compare.py` now writes signed `absolute_error_ps` and prints median/worst absolute error in picoseconds alongside percentage error. Values are converted from Liberty nanoseconds using 1 ns = 1000 ps.
+`libertydiff/compare.py` now writes signed `absolute_error_ps` and prints median/worst absolute error in picoseconds alongside percentage error. Values are converted from Liberty nanoseconds using 1 ns = 1000 ps.
 
 Validation:
 

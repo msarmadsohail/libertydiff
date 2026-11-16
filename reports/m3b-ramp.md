@@ -19,5 +19,5 @@ Command:
 
 ```sh
 ngspice_con.exe -b work/m3b-inv_1-ramp.cir -o work/m3b-inv_1-ramp.log
-python checker/compare.py work/m3b-inv_1-ramp.json <foundry.lib> --output work/m3b-inv_1-ramp-comparison.csv
+python libertydiff/compare.py work/m3b-inv_1-ramp.json <foundry.lib> --output work/m3b-inv_1-ramp-comparison.csv
 ```

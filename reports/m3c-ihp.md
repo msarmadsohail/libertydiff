@@ -34,5 +34,5 @@ Commands:
 
 ```sh
 charlib run /work/work/m3c-ihp.yml --output /work/work/m3c-ihp.lib -j 4
-python checker/compare.py work/m3c-ihp.lib <ihp-foundry.lib> --output work/m3c-ihp-comparison.csv
+python libertydiff/compare.py work/m3c-ihp.lib <ihp-foundry.lib> --output work/m3c-ihp-comparison.csv
 ```

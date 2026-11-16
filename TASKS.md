@@ -27,7 +27,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **2.1 Simulate one inverter point.** Hand-write a test bench for `inv_1`: one input transition time and one load taken from the middle of the grid in `docs/measurement-rules.md`, rising and falling input.
   Done when: ngspice runs without errors and prints both delays and both output transition times, measured at the thresholds from task 1.4.
 
-- [x] **2.2 Write the checker.** `checker/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
+- [x] **2.2 Write the checker.** `libertydiff/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
   Done when: fed the foundry file against itself it reports zero error at every point, and fed a copy with one value changed by 10% it reports exactly that point.
 
 - [x] **2.3 Compare the hand-run point.** Run the checker on the result of 2.1.
@@ -81,7 +81,7 @@ Milestone 3b showed a hand-written bench and CharLib landing on almost the same 
 - [x] **3c.1 Do the two methods agree with each other?** Compare, point by point, the hand-run extracted grid against the CharLib extracted rerun for `inv_1` (196 points).
   Done when: `reports/m3c-agreement.md` gives the median and worst difference between the two methods, per table.
 
-- [x] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `checker/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
+- [x] **3c.2 Report absolute error as well as percentage.** The owner authorises one change to `libertydiff/compare.py`: add an absolute-error column in picoseconds and print its median and worst. Percentages of near-zero delays (small load, slow input) are misleading on their own. The identity and 10% perturbation tests must still pass.
   Done when: the `inv_1` extracted grid is re-reported with both measures, and the report states how many of the 196 points are off by more than 10% and also by more than 5 ps.
 
 - [x] **3c.3 A second cell.** Run CharLib on `nand2_1` with the schematic netlist and compare with the corrected checker.
@@ -102,19 +102,19 @@ There are no stop gates until task 8.5. If a task is blocked after three honest 
 
 ## Milestone 5 — the comparison tool as a package (branch `m5-package`)
 
-- [ ] **5.1 Package layout.** Move the comparison code into a Python package `libertydiff/` with a `pyproject.toml` (name `libertydiff`, Apache-2.0, Python 3.10+, no dependencies outside the standard library unless one is justified in `PROGRESS.md`). Keep `checker/` as a thin wrapper or remove it and update every reference.
+- [x] **5.1 Package layout.** Move the comparison code into a Python package `libertydiff/` with a `pyproject.toml` (name `libertydiff`, Apache-2.0, Python 3.10+, no dependencies outside the standard library unless one is justified in `PROGRESS.md`). Keep `checker/` as a thin wrapper or remove it and update every reference.
   Done when: `pip install -e .` works in a fresh virtual environment under `.venv/` and `python -m libertydiff --help` prints usage.
 
-- [ ] **5.2 Liberty reader.** One reader that returns, for every cell, pin, timing arc and table: the two axes with their variable names, the values, and the units from the library header. It must handle both axis orders (input transition first or load first), scalar tables, and quoted multi-line value lists.
+- [x] **5.2 Liberty reader.** One reader that returns, for every cell, pin, timing arc and table: the two axes with their variable names, the values, and the units from the library header. It must handle both axis orders (input transition first or load first), scalar tables, and quoted multi-line value lists.
   Done when: unit tests pass on small hand-written Liberty snippets for each of those cases, and the reader parses the SkyWater and IHP foundry files completely, reporting the cell and table counts.
 
-- [ ] **5.3 Comparison.** `libertydiff compare A.lib B.lib` matches cells, arcs and tables between two files, aligns axes by variable name not by position, and reports each point's value in both files, the percentage difference and the absolute difference in picoseconds. Points present in only one file are listed, never silently dropped. Options: `--cells` to restrict, `--csv` and `--json` outputs, `--summary` for median and worst per cell and per table.
+- [x] **5.3 Comparison.** `libertydiff compare A.lib B.lib` matches cells, arcs and tables between two files, aligns axes by variable name not by position, and reports each point's value in both files, the percentage difference and the absolute difference in picoseconds. Points present in only one file are listed, never silently dropped. Options: `--cells` to restrict, `--csv` and `--json` outputs, `--summary` for median and worst per cell and per table.
   Done when: a file compared with itself gives zero at every point; a copy with one value changed by 10% reports exactly that point; a copy with axes swapped and values transposed reports zero difference; unit tests cover all three.
 
-- [ ] **5.4 Honest summaries.** The summary always prints the number of points compared and the number unmatched, and gives both percentage and picosecond figures. Add `--min-abs` so that points whose absolute difference is below a threshold can be reported separately, because a large percentage of a near-zero delay is not a meaningful error.
+- [x] **5.4 Honest summaries.** The summary always prints the number of points compared and the number unmatched, and gives both percentage and picosecond figures. Add `--min-abs` so that points whose absolute difference is below a threshold can be reported separately, because a large percentage of a near-zero delay is not a meaningful error.
   Done when: unit tests cover the counts and the threshold, and the SkyWater `inv_1` comparison from milestone 3c is reproduced to the same figures.
 
-- [ ] **5.5 Tests.** `pytest` runs the whole test suite in under a minute with no chip kit installed (tests use small fixtures under `tests/fixtures/`, never the foundry files).
+- [x] **5.5 Tests.** `pytest` runs the whole test suite in under a minute with no chip kit installed (tests use small fixtures under `tests/fixtures/`, never the foundry files).
   Done when: `pytest` passes in the fresh virtual environment and the number of tests is recorded.
 
 ## Milestone 6 — the benchmark harness (branch `m6-harness`)

@@ -26,7 +26,7 @@ Median absolute error: 20.5335%. Worst absolute error: 31.8481%.
 Command:
 
 ```powershell
-python checker\compare.py work\m2-inv_1.json pdk\ciel\sky130\versions\e7a6777d157a9d94c7ac757457b9e4309e9e9000\sky130A\libs.ref\sky130_fd_sc_hd\lib\sky130_fd_sc_hd__tt_025C_1v80.lib --output work\m2-inv_1-comparison.csv
+python libertydiff\compare.py work\m2-inv_1.json pdk\ciel\sky130\versions\e7a6777d157a9d94c7ac757457b9e4309e9e9000\sky130A\libs.ref\sky130_fd_sc_hd\lib\sky130_fd_sc_hd__tt_025C_1v80.lib --output work\m2-inv_1-comparison.csv
 ```
 
 ## Simulator sensitivity

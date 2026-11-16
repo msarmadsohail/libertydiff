@@ -155,3 +155,33 @@ What was done: wrote `reports/m3c-closing.md` combining method agreement, SkyWat
 Command that proves it: inspect `reports/m3c-closing.md` against `reports/m3c-agreement.md`, `reports/m3c-absolute.md`, `reports/m3c-nand2.md` and `reports/m3c-ihp.md`; `git diff --check`.
 Result: same simulator/CharLib gives IHP median 4.65003% over 196 points versus extracted SkyWater CharLib median 14.6039% over 196 points. Absolute medians are close (15.2825 ps versus 15.8202 ps hand-run). Conclusion: percentage gap primarily follows kit/model/library, not simulator alone; model versus foundry-method effects remain confounded. Stopped.
 Surprises or open points: a large percentage gap does not imply a correspondingly large absolute-time gap on the second kit.
+
+## 2026-11-17 — task 5.1 — done
+What was done: created branch `m5-package`; added Apache-2.0 `pyproject.toml` for Python 3.10+, moved comparison modules into `libertydiff/`, added package and CLI entry points, retained `checker/compare.py` as a thin wrapper, updated references and ignored egg-info. No runtime dependencies added.
+Command that proves it: `python -m venv .venv; .\.venv\Scripts\python.exe -m pip install -e .; .\.venv\Scripts\python.exe -m libertydiff --help`.
+Result: editable install succeeded in the fresh environment; CLI printed usage with the `compare` subcommand.
+Surprises or open points: no external dependency was needed; setuptools is declared only as the build backend.
+
+## 2026-11-17 — task 5.2 — done
+What was done: added `libertydiff/reader.py`, a structural Liberty reader returning cells, pins, arcs, tables, named axes, values and header-derived units. Supports both axis orders, scalar tables and quoted multiline value lists. Added four unit tests. Added pytest as optional test-only dependency because the project requires pytest and no runtime dependency.
+Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_reader.py -q`; call `read_library` on the SkyWater and IHP foundry files and print cell/table counts and units.
+Result: 4 tests passed. SkyWater: 428 cells and 5,368 tables; IHP: 84 cells and 1,022 tables. Both headers resolve to 1000 ps per time unit and 1000 fF per capacitance unit.
+Surprises or open points: axis variable names come from each table's declared template, never their position.
+
+## 2026-11-17 — task 5.3 — done
+What was done: added `libertydiff/diff.py` with cell/arc/table matching, named-axis point alignment, unit conversion to picoseconds, unmatched-table reporting, per-cell/table summaries, and CSV/JSON output. Wired `libertydiff compare` options `--cells`, `--csv`, `--json`, `--summary` and `--min-abs`. Added four comparison tests.
+Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_reader.py tests/test_diff.py -q`; `.venv/Scripts/python.exe -m libertydiff compare --help`.
+Result: 8 tests passed, covering zero identity, exactly one 10% point, axes-swapped/transposed zero difference, and unmatched/output behavior.
+Surprises or open points: point coordinates are matched by variable name and numeric value, so table axis order does not affect comparison.
+
+## 2026-11-17 — task 5.4 — done
+What was done: ensured every summary prints compared and unmatched counts with percentage and picosecond figures. `--min-abs` filters points included in summary statistics while unmatched tables remain listed. Added tests for counts, threshold and cell filtering. Reconstructed the milestone 3c generated inverter library and compared it cell-scoped against the foundry.
+Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_diff.py -q`; Python assertion of all four per-table medians/worsts against `reports/m3c-absolute.md`.
+Result: 6 comparison tests passed. Reproduced 196 points with zero unmatched and exact milestone figures: cell_fall 14.010980%/22.3268 ps, cell_rise 15.962221%/38.5548 ps, fall_transition 8.577413%/7.4575 ps, rise_transition 14.470473%/11.4437 ps medians.
+Surprises or open points: comparing a one-cell generated file against the entire foundry library correctly reports all other foundry tables as unmatched; benchmark comparisons must use `--cells` or a matching cell subset.
+
+## 2026-11-17 — task 5.5 — done
+What was done: moved the comparison fixture to `tests/fixtures/basic.lib`, configured pytest to discover only `tests/`, and ran the complete suite in the fresh `.venv` without using any chip-kit file.
+Command that proves it: `.venv/Scripts/python.exe -m pytest -q` with elapsed time measured by PowerShell `Measure-Command`.
+Result: 10 tests passed in 0.07 s (0.689 s wall time including process startup), below one minute.
+Surprises or open points: unrestricted pytest initially collected KLayout/OpenEMS tests inside downloaded `pdk/`; `testpaths = ["tests"]` prevents that external dependency.

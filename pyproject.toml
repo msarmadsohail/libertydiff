@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "libertydiff"
+version = "0.1.0"
+description = "Point-by-point Liberty timing comparison"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [{name = "libertydiff contributors"}]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+libertydiff = "libertydiff.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["libertydiff*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
