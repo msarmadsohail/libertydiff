@@ -87,7 +87,7 @@ Milestone 3b showed a hand-written bench and CharLib landing on almost the same 
 - [x] **3c.3 A second cell.** Run CharLib on `nand2_1` with the schematic netlist and compare with the corrected checker.
   Done when: `reports/m3c-nand2.md` gives the per-table error with point counts, in both measures.
 
-- [ ] **3c.4 A second kit.** Fetch the IHP SG13G2 kit *(check how; `ciel` may support it)*, find its standard-cell Liberty file and netlists, read the Liberty header for how and with what tool it was produced, and run CharLib on its smallest inverter at the typical corner.
+- [x] **3c.4 A second kit.** Fetch the IHP SG13G2 kit *(check how; `ciel` may support it)*, find its standard-cell Liberty file and netlists, read the Liberty header for how and with what tool it was produced, and run CharLib on its smallest inverter at the typical corner.
   Done when: `reports/m3c-ihp.md` gives the error table with point counts in both measures, and quotes whatever the header says about the tool that produced the file. If the kit cannot be fetched or run after three attempts, say why.
 
 - [ ] **3c.5 STOP — closing report.** `reports/m3c-closing.md`: state, with the numbers, whether the gap follows the kit (present on SkyWater, absent or different on IHP), follows the simulator (present on both), or cannot be told apart. Do not recommend. Stop.

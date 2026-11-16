@@ -143,3 +143,9 @@ What was done: ran CharLib on schematic `nand2_1` with four workers, compared wi
 Command that proves it: `charlib run /work/work/m3-charlib.yml --output /work/work/m3c-nand2.lib -j 4 --filter 'sky130_fd_sc_hd__nand2_1$'`; `python checker/compare.py work/m3c-nand2.lib <foundry.lib> --output work/m3c-nand2-comparison.csv`.
 Result: 392 points across two arcs. Overall median 9.11900% and 15.0047 ps; worst 284.899% and 224.695 ps. Runtime 606.47 s for 790 operations.
 Surprises or open points: this cell's median percentage is lower than the inverter's, but near-zero falling-delay points still produce large percentage errors.
+
+## 2026-11-17 — task 3c.4 — done
+What was done: fetched IHP SG13G2 with ciel, located its typical Liberty and standard-cell netlist, inspected the header, compiled the supplied PSP103/PSP103-NQS Verilog-A models with OpenVAF Reloaded v24.0.2mob, loaded them through `.spiceinit`, and ran CharLib on `sg13g2_inv_1`. Wrote `reports/m3c-ihp.md`.
+Command that proves it: `charlib run /work/work/m3c-ihp.yml --output /work/work/m3c-ihp.lib -j 4` in `cellchar-openvaf:latest` from `/work/work/m3c-ihp-init`; `python checker/compare.py work/m3c-ihp.lib <ihp-foundry.lib> --output work/m3c-ihp-comparison.csv`.
+Result: 196 points, median 4.65003% and 15.2825 ps, worst 64.5966% and 240.681 ps. Runtime 4,728.70 s for 395 operations. Header quotes IHP 2025, date and revision 0.1.4 but names no producer tool.
+Surprises or open points: initial shared-ngspice run failed because OSDI modules were absent; `pre_osdi` is unavailable in ngspice 44.2, while `.spiceinit` `osdi` loads before parsing and works. Full ngspice source build was unnecessary and failed on legacy `sys_errlist`.
