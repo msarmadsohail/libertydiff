@@ -44,7 +44,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **3.2 libretto.** Same for `snishizawa/libretto`.
   Done when: `reports/m3-libretto.md` exists in the same form.
 
-- [ ] **3.3 Read the others.** Read the README and code layout of `vyges-tools/char` and of lctime from the LibreCell project (hosted on Codeberg) *(check the location)*. Do not install them.
+- [x] **3.3 Read the others.** Read the README and code layout of `vyges-tools/char` and of lctime from the LibreCell project (hosted on Codeberg) *(check the location)*. Do not install them.
   Done when: `reports/m3-others.md` states, for each, the licence, what it claims to produce, whether it publishes any accuracy figure against a foundry file, and the date of its last change.
 
 - [ ] **3.4 STOP — decision report.** Write `reports/m3-decision.md` with: the hand-run inverter errors from milestone 2; each existing tool's median and worst error per cell with the point counts; how long each took; and which of these three the numbers support:
