@@ -41,7 +41,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **3.1 CharLib.** Install `stineje/CharLib` under `.tools/`, run it on the ten cells at the corner above, and run the checker on its output.
   Done when: `reports/m3-charlib.md` holds the per-cell error table, with the number of table points compared for each cell, or a precise account of why it could not be run.
 
-- [ ] **3.2 libretto.** Same for `snishizawa/libretto`.
+- [x] **3.2 libretto.** Same for `snishizawa/libretto`.
   Done when: `reports/m3-libretto.md` exists in the same form.
 
 - [ ] **3.3 Read the others.** Read the README and code layout of `vyges-tools/char` and of lctime from the LibreCell project (hosted on Codeberg) *(check the location)*. Do not install them.
