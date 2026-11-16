@@ -89,3 +89,39 @@ What was done: wrote `reports/m3-decision.md` with the four hand-run errors, Cha
 Command that proves it: verify the report exists and inspect its tables against `reports/m2-smoke.md`, `reports/m3-charlib.md`, `reports/m3-libretto.md` and `reports/m3-others.md`; `git diff --check`.
 Result: decision evidence report complete. Hand-run: 4 points, median 20.5335%, worst 31.8481%. CharLib: 3,724 points, median 53.2228%, worst 6795.10%, 3,953.83 s. libretto: no valid points, stalled energy simulations. Stopped at the milestone 3 stop gate.
 Surprises or open points: the measurements do not cleanly satisfy either the “existing tools already close” premise or the “hand-run point close” premise; the report leaves the choice to the owner.
+
+## 2026-11-16 — task 3b.1 — done
+What was done: created branch `m3b-bench`; changed only the hand bench's full input ramp from 0.122474 ns to 0.204123333333 ns (`transition / 0.6`), reran the same point and compared all four values. Wrote `reports/m3b-ramp.md`.
+Command that proves it: `./.tools/envs/ngspice/Library/bin/ngspice_con.exe -b work/m3b-inv_1-ramp.cir -o work/m3b-inv_1-ramp.log` under `timeout 180`; `python checker/compare.py work/m3b-inv_1-ramp.json <foundry.lib> --output work/m3b-inv_1-ramp-comparison.csv`.
+Result: 4 points. Errors changed from -31.8481%, -11.6454%, -29.4216%, +1.96942% to -15.1304%, +7.62445%, -10.3498%, +4.18491%. Median absolute error 20.5335% before, 8.98713% after.
+Surprises or open points: results match the owner review's approximate values; no model, load or threshold setting changed.
+
+## 2026-11-16 — task 3b.2 — done
+What was done: replaced the four model includes with `sky130.lib.spice` section `tt` and attempted native and Linux runs from the correct nested-include directory. Diagnosed fatal elaboration in unrelated device models, then ran a scratch `tt` entry containing the kit's two required transistor models, mismatch files and non-FET parameters. Wrote `reports/m3b-models.md`.
+Command that proves it: `docker run --rm -v <repo>:/work -v <pdk-version>:/pdk cellchar-charlib:987e90f-trixie-np2 sh -c 'timeout 300 ngspice -b /work/work/m3b-inv_1-kitmodels-pruned.cir -o /work/work/m3b-inv_1-kitmodels-pruned.log'`; parse all four values and compare with `work/m3b-inv_1-ramp.log`.
+Result: exit 0; all four values identical at printed precision (0.000000000% movement). The direct full top-level include remains unusable due to unrelated-model formula errors.
+Surprises or open points: nested includes require running from the kit's ngspice directory; excluding unused device families was necessary for successful elaboration. No transistor model parameter was edited.
+
+## 2026-11-16 — task 3b.3 — done
+What was done: generated 49 corrected-ramp inverter decks, ran them with four workers and a 180 s Python timeout per deck, collected 196 table values, compared with the foundry and wrote `reports/m3b-inv-grid.md` with per-table and per-grid-coordinate errors.
+Command that proves it: `python work/m3b-run-grid.py`; `python checker/compare.py work/m3b-inv-grid.json <foundry.lib> --output work/m3b-inv-grid-comparison.csv`.
+Result: 49 of 49 simulations completed, 196 of 196 points compared. Overall median absolute error 14.9399%, worst 353.502%. Per-table medians: cell_fall 19.5153%, cell_rise 12.7534%, fall_transition 16.9830%, rise_transition 11.3403%. Error concentrates at small loads; worst at 1.5 ns input and 0.0005 pF.
+Surprises or open points: a fixed 5 ns window missed the 80% crossing at the fastest input/largest load; the window now scales with ramp and load. Native simulations use `ngspice_con.exe` directly with Python timeout enforcement.
+
+## 2026-11-16 — task 3b.4 — done
+What was done: confirmed no extracted inverter netlist ships in `spice/` or `cdl/`; built Magic 8.3.703 from source in Docker image `cellchar-magic:latest`, extracted the supplied Magic layout with junction geometry and 14 capacitors, and ran the same 49 points. Wrote `reports/m3b-parasitics.md`.
+Command that proves it: `magic -dnull -noconsole -T /pdk/sky130A/libs.tech/magic/sky130A.tech /work/work/m3b-extract.tcl`; `python work/m3b-run-grid-extracted.py`; `python checker/compare.py work/m3b-inv-grid-extracted.json <foundry.lib> --output work/m3b-inv-grid-extracted-comparison.csv`.
+Result: 196 of 196 points compared for each netlist. Overall median: schematic 14.9399%, extracted 14.3659%; worst: 353.502% versus 235.211%. Per-table figures in the report. Extracted decks verified to include `work/m3b-inv_1-extracted.spice`.
+Surprises or open points: bookworm Magic 8.3.105 segfaulted on the kit technology; current source worked. An initial runner substitution miss produced invalid identical results; those logs were deleted and the corrected run was verified.
+
+## 2026-11-16 — task 3b.5 — done
+What was done: inspected the ten worst original `inv_1` points and CharLib's ramp/writer source. Found and fixed a checker orientation bug: CharLib's load-first tables also require transposing values. Revalidated 247,352 self-points at zero and one 10% changed point. Reran only `inv_1` with the extracted netlist supplied through YAML, without changing CharLib code. Wrote `reports/m3b-charlib.md`.
+Command that proves it: `charlib run /work/work/m3b-charlib-extracted.yml --output /work/work/m3b-charlib-extracted.lib -j 4 --filter 'sky130_fd_sc_hd__inv_1$'`; `python checker/compare.py work/m3b-charlib-extracted.lib <foundry.lib> --output work/m3b-charlib-extracted-comparison.csv`.
+Result: 196 points before and after. Overall median 14.9399% before (orientation corrected), 14.6039% after; worst 405.277% before, 260.480% after. Rerun 187.75 s for 395 operations.
+Surprises or open points: CharLib already scales the 20%-80% ramp correctly; the huge milestone 3 errors were primarily checker transposition, not CharLib's ramp. A subprocess-backend attempt failed on space-containing paths and was not used for the accepted result.
+
+## 2026-11-16 — task 3b.6 — done (STOP)
+What was done: wrote `reports/m3b-decision.md` using the corrected ramp, full schematic/extracted grids and configuration-only CharLib rerun. Explicitly invalidated the earlier ten-cell error table and made no new ten-cell claim. Stated evidence for all three options without choosing.
+Command that proves it: inspect `reports/m3b-decision.md` against `reports/m3b-ramp.md`, `reports/m3b-inv-grid.md`, `reports/m3b-parasitics.md` and `reports/m3b-charlib.md`; `git diff --check`.
+Result: revised report complete. Corrected single point median 8.98713% over 4 points; extracted hand grid median 14.3659% over 196 points; extracted CharLib median 14.6039% over 196 points. Stopped at the milestone 3b stop gate.
+Surprises or open points: hand-run and CharLib full-grid results are similar, so the evidence does not show a clear implementation advantage for building a new tool.
