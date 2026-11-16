@@ -51,22 +51,23 @@ class Comparison:
     def summary(self, min_abs: float = 0.0) -> tuple[Summary, ...]:
         groups: dict[tuple[str, str], list[PointDifference]] = {}
         for difference in self.differences:
-            if abs(difference.absolute_difference_ps) >= min_abs:
-                groups.setdefault((difference.cell, difference.table), []).append(difference)
+            groups.setdefault((difference.cell, difference.table), []).append(difference)
         unmatched_counts: dict[tuple[str, str], int] = {}
         for unmatched in self.unmatched:
             key = (unmatched.cell, unmatched.table)
             unmatched_counts[key] = unmatched_counts.get(key, 0) + unmatched.points
         summaries = []
         for (cell, table), points in sorted(groups.items()):
-            percentages = [abs(point.percentage_difference) for point in points
+            included = [point for point in points if abs(point.absolute_difference_ps) >= min_abs]
+            percentages = [abs(point.percentage_difference) for point in included
                            if point.percentage_difference is not None and math.isfinite(point.percentage_difference)]
-            absolute = [abs(point.absolute_difference_ps) for point in points]
+            absolute = [abs(point.absolute_difference_ps) for point in included]
             summaries.append(Summary(
-                cell, table, len(points), unmatched_counts.get((cell, table), 0),
+                cell, table, len(included), unmatched_counts.get((cell, table), 0),
                 statistics.median(percentages) if percentages else None,
                 max(percentages) if percentages else None,
-                statistics.median(absolute), max(absolute),
+                statistics.median(absolute) if absolute else 0.0,
+                max(absolute) if absolute else 0.0,
             ))
         for (cell, table), count in sorted(unmatched_counts.items()):
             if (cell, table) not in groups:

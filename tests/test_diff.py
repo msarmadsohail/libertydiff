@@ -78,3 +78,24 @@ def test_unmatched_and_outputs(tmp_path):
     payload = json.loads(json_path.read_text())
     assert payload["points_unmatched"] == 8
     assert len(payload["unmatched"]) == 2
+
+
+def test_summary_counts_and_min_abs(tmp_path):
+    path = tmp_path / "a.lib"
+    path.write_text(BASE)
+    comparison = compare_paths(path, path)
+    summaries = comparison.summary()
+    assert len(summaries) == 1
+    assert summaries[0].points_compared == 4
+    assert summaries[0].points_unmatched == 0
+    assert summaries[0].median_percentage == 0
+    assert summaries[0].median_absolute_ps == 0
+    assert comparison.summary(min_abs=1)[0].points_compared == 0
+
+
+def test_cell_filter(tmp_path):
+    path = tmp_path / "a.lib"
+    path.write_text(BASE + BASE.replace("cell (inv)", "cell (other)"))
+    comparison = compare_paths(path, path, cells=["inv"])
+    assert len(comparison.differences) == 4
+    assert {point.cell for point in comparison.differences} == {"inv"}

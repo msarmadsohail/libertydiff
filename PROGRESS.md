@@ -173,3 +173,9 @@ What was done: added `libertydiff/diff.py` with cell/arc/table matching, named-a
 Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_reader.py tests/test_diff.py -q`; `.venv/Scripts/python.exe -m libertydiff compare --help`.
 Result: 8 tests passed, covering zero identity, exactly one 10% point, axes-swapped/transposed zero difference, and unmatched/output behavior.
 Surprises or open points: point coordinates are matched by variable name and numeric value, so table axis order does not affect comparison.
+
+## 2026-11-17 — task 5.4 — done
+What was done: ensured every summary prints compared and unmatched counts with percentage and picosecond figures. `--min-abs` filters points included in summary statistics while unmatched tables remain listed. Added tests for counts, threshold and cell filtering. Reconstructed the milestone 3c generated inverter library and compared it cell-scoped against the foundry.
+Command that proves it: `.venv/Scripts/python.exe -m pytest tests/test_diff.py -q`; Python assertion of all four per-table medians/worsts against `reports/m3c-absolute.md`.
+Result: 6 comparison tests passed. Reproduced 196 points with zero unmatched and exact milestone figures: cell_fall 14.010980%/22.3268 ps, cell_rise 15.962221%/38.5548 ps, fall_transition 8.577413%/7.4575 ps, rise_transition 14.470473%/11.4437 ps medians.
+Surprises or open points: comparing a one-cell generated file against the entire foundry library correctly reports all other foundry tables as unmatched; benchmark comparisons must use `--cells` or a matching cell subset.
