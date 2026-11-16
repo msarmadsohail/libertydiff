@@ -53,3 +53,9 @@ What was done: wrote `checker/compare.py` to compare generated Liberty or JSON t
 Command that proves it: `python checker/compare.py <foundry.lib> <foundry.lib> --output work/m2-self.csv`; change only `inv_1` `cell_fall` row 1 column 1 from 0.0143656 to 0.01580216 in `work/m2-modified.lib`; `python checker/compare.py work/m2-modified.lib <foundry.lib> --output work/m2-modified.csv`; assert nonzero-row counts and the changed value with Python.
 Result: self-comparison: 247,352 points, zero nonzero errors, median 0%, worst 0%. Modified comparison: 247,352 points, exactly one nonzero error at `sky130_fd_sc_hd__inv_1`, `A->Y`, `cell_fall`, input 0.01 ns/load 0.0005 pF, exactly 10%.
 Surprises or open points: initial nested regular-expression parsing was too slow and early state tracking missed arcs after internal-power groups. The final token parser associates each timing group with its own `related_pin`; the acceptance assertions caught these defects rather than accepting an empty or partial comparison.
+
+## 2026-11-16 — task 2.3 — done
+What was done: converted the four task 2.1 measurements to JSON, ran the checker against the foundry file, and wrote `reports/m2-smoke.md` with generated/foundry values, signed percentage errors and all simulator options.
+Command that proves it: `python checker/compare.py work/m2-inv_1.json pdk/ciel/sky130/versions/e7a6777d157a9d94c7ac757457b9e4309e9e9000/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib --output work/m2-inv_1-comparison.csv`.
+Result: 4 points compared. cell_fall -31.8481%; cell_rise -11.6454%; fall_transition -29.4216%; rise_transition +1.96942%. Median absolute error 20.5335%, worst 31.8481%.
+Surprises or open points: three of four hand-run values are substantially faster than the foundry values; no correction factor has been applied.

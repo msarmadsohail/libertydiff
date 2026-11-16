@@ -30,7 +30,7 @@ The corner used throughout: typical transistors, 25 °C, 1.8 V.
 - [x] **2.2 Write the checker.** `checker/compare.py` takes a generated Liberty file (or a small JSON of measured points) and the foundry file, and writes a table: cell, arc, table, point, generated value, foundry value, percentage error. It also prints the median and the worst error.
   Done when: fed the foundry file against itself it reports zero error at every point, and fed a copy with one value changed by 10% it reports exactly that point.
 
-- [ ] **2.3 Compare the hand-run point.** Run the checker on the result of 2.1.
+- [x] **2.3 Compare the hand-run point.** Run the checker on the result of 2.1.
   Done when: `reports/m2-smoke.md` states the four percentage errors and the exact simulator options used.
 
 - [ ] **2.4 Simulator sensitivity.** Repeat 2.1 with a tighter time step and tighter tolerances.
